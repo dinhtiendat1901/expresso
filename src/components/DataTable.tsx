@@ -1,58 +1,46 @@
-import {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Table, Checkbox, Button, Group} from '@mantine/core';
+import axios from 'axios';
+import {PageState} from "../page/HomePage.tsx";
+import {convertDateTime} from "../utils/utils.ts";
 
-const elements = [
-    {position: 6, mass: 12.011, symbol: 'C', name: 'Carbon'},
-    {position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen'},
-    {position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium'},
-    {position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium'},
-    {position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium'},
-];
 
-export default function DataTable() {
+interface Profile {
+    id: number;
+    name: string;
+    description: string;
+    created_date: string;
+}
+
+interface DataTableProps {
+    pageState: PageState;
+}
+
+
+export default function DataTable({pageState}: DataTableProps) {
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
+    const [data, setData] = useState<Profile[]>([]);
+    useEffect(() => {
+        async function fetchData() {
+            const response = await axios.get('http://127.0.0.1:8000/profiles', {
+                params: {
+                    skip: (pageState.currentPage - 1) * pageState.pageLimit,
+                    limit: pageState.pageLimit
+                }
+            });
+            setData(response.data)
+        }
 
-    const rows = elements.map((element) => (
-        <Table.Tr
-            key={element.name}
-            bg={selectedRows.includes(element.position) ? 'var(--mantine-color-blue-light)' : undefined}
-        >
-            <Table.Td>
-                <Checkbox
-                    aria-label="Select row"
-                    checked={selectedRows.includes(element.position)}
-                    onChange={(event) =>
-                        setSelectedRows(
-                            event.currentTarget.checked
-                                ? [...selectedRows, element.position]
-                                : selectedRows.filter((position) => position !== element.position)
-                        )
-                    }
-                />
-            </Table.Td>
-            <Table.Td>{element.position}</Table.Td>
-            <Table.Td>{element.name}</Table.Td>
-            <Table.Td>{element.symbol}</Table.Td>
-            <Table.Td>{element.mass}</Table.Td>
-            <Table.Td>
-                <Group>
-                    <Button radius='xl' variant="gradient"
-                            gradient={{from: 'indigo', to: 'cyan', deg: 145}}>Run</Button>
-                    <Button color='red' radius='xl' variant="gradient"
-                            gradient={{from: 'grape', to: 'red', deg: 360}}>Delete</Button>
-                </Group>
-            </Table.Td>
-        </Table.Tr>
-    ));
+        fetchData().then()
+    }, [pageState]);
+
 
     return (
         <Table>
             <Table.Thead>
                 <Table.Tr>
                     <Table.Th>
-                        <Checkbox
-                            aria-label="Select row"
-                        />
+                        <Checkbox aria-label="Select row"/>
                     </Table.Th>
                     <Table.Th>ID</Table.Th>
                     <Table.Th>Name</Table.Th>
@@ -61,7 +49,35 @@ export default function DataTable() {
                     <Table.Th>Action</Table.Th>
                 </Table.Tr>
             </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
+            <Table.Tbody>{data.map((profile) => (
+                <Table.Tr
+                    key={profile.id}
+                    bg={selectedRows.includes(profile.id) ? 'var(--mantine-color-blue-light)' : undefined}>
+                    <Table.Td>
+                        <Checkbox
+                            aria-label="Select row"
+                            checked={selectedRows.includes(profile.id)}
+                            onChange={(event) =>
+                                setSelectedRows(
+                                    event.currentTarget.checked
+                                        ? [...selectedRows, profile.id]
+                                        : selectedRows.filter((id) => id !== profile.id)
+                                )}/>
+                    </Table.Td>
+                    <Table.Td>{profile.id}</Table.Td>
+                    <Table.Td>{profile.name}</Table.Td>
+                    <Table.Td>{profile.description}</Table.Td>
+                    <Table.Td>{convertDateTime(profile.created_date)}</Table.Td>
+                    <Table.Td>
+                        <Group>
+                            <Button radius='xl' variant="gradient"
+                                    gradient={{from: 'indigo', to: 'cyan', deg: 145}}>Run</Button>
+                            <Button color='red' radius='xl' variant="gradient"
+                                    gradient={{from: 'grape', to: 'red', deg: 360}}>Delete</Button>
+                        </Group>
+                    </Table.Td>
+                </Table.Tr>))
+            }</Table.Tbody>
         </Table>
     );
 }

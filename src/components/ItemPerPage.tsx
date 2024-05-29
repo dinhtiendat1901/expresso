@@ -1,6 +1,11 @@
 import {Select, Stack, Text} from '@mantine/core';
+import React from "react";
 
-export default function ItemPerPage() {
+interface ItemPerPageProps {
+    handlePageLimitChange: (limit: number) => void
+}
+
+export default function ItemPerPage({handlePageLimitChange}: ItemPerPageProps) {
     return (
         <>
             <Stack gap='xs'>
@@ -10,7 +15,7 @@ export default function ItemPerPage() {
                         data={['10', '20', '30', '40']}
                         defaultValue="10"
                         allowDeselect={false}
-                />
+                        onChange={(value) => handlePageLimitChange(parseInt(value))}/>
             </Stack>
 
         </>
