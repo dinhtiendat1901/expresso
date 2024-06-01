@@ -3,6 +3,7 @@ import {Table, Checkbox, Button, Group} from '@mantine/core';
 import axios from 'axios';
 import {convertDateTime} from "../utils/utils.ts";
 import {useAppSelector} from "../store";
+import {IconPhoto, IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
 
 
 interface Profile {
@@ -66,12 +67,13 @@ export default function DataTable() {
                     <Table.Td>{profile.description}</Table.Td>
                     <Table.Td>{convertDateTime(profile.created_date)}</Table.Td>
                     <Table.Td>
-                        <Group>
-                            <Button radius='xl' variant="gradient"
-                                    gradient={{from: 'indigo', to: 'cyan', deg: 145}}>Run</Button>
-                            <Button color='red' radius='xl' variant="gradient"
-                                    gradient={{from: 'grape', to: 'red', deg: 360}}>Delete</Button>
-                        </Group>
+                        <Button.Group>
+                            <Button variant='subtle' pl='5' pr='5'>
+                                <IconPlayerPlay size={21}/>
+                            </Button>
+                            <Button variant='subtle' pl='5' pr='5' color='black'><IconSettings size={21}/></Button>
+                            <Button variant='subtle' color='red' pl='5' pr='5'><IconTrash size={21}/></Button>
+                        </Button.Group>
                     </Table.Td>
                 </Table.Tr>))
             }</Table.Tbody>
