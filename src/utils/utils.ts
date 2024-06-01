@@ -11,7 +11,7 @@ export function convertDateTime(input: string): string {
     const month = pad(date.getUTCMonth() + 1); // Months are zero-based
     const year = date.getUTCFullYear();
 
-    return `Time: ${hours}:${minutes}:${seconds} Date: ${day}-${month}-${year}`;
+    return `${hours}:${minutes}:${seconds} / ${day}-${month}-${year}`;
 }
 
 

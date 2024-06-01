@@ -33,17 +33,17 @@ export default function DataTable() {
 
 
     return (
-        <Table>
+        <Table withRowBorders={false} highlightOnHover withColumnBorders>
             <Table.Thead>
                 <Table.Tr>
-                    <Table.Th>
+                    <Table.Th w={50}>
                         <Checkbox aria-label="Select row"/>
                     </Table.Th>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Name</Table.Th>
+                    <Table.Th w={50}>ID</Table.Th>
+                    <Table.Th w={'20%'}>Name</Table.Th>
                     <Table.Th>Description</Table.Th>
-                    <Table.Th>Created Date</Table.Th>
-                    <Table.Th>Action</Table.Th>
+                    <Table.Th w={300}>Created Date</Table.Th>
+                    <Table.Th w={250}>Action</Table.Th>
                 </Table.Tr>
             </Table.Thead>
             <Table.Tbody>{data.map((profile) => (

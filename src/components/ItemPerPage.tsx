@@ -20,6 +20,7 @@ export default function ItemPerPage() {
                         data={['10', '20', '30', '40']}
                         defaultValue="10"
                         allowDeselect={false}
+                        withCheckIcon={false}
                         onChange={(value) => handlePageLimitChange(parseInt(value))}/>
             </Stack>
         </>
