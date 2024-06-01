@@ -1,11 +1,16 @@
 import {Select, Stack, Text} from '@mantine/core';
 import React from "react";
+import {useAppDispatch} from "../store";
+import pageSlice from "../store/page-slice.ts";
 
-interface ItemPerPageProps {
-    handlePageLimitChange: (limit: number) => void
-}
 
-export default function ItemPerPage({handlePageLimitChange}: ItemPerPageProps) {
+export default function ItemPerPage() {
+    const dispatch = useAppDispatch()
+
+    function handlePageLimitChange(limit: number) {
+        dispatch(pageSlice.actions.changePageLimit(limit));
+    }
+
     return (
         <>
             <Stack gap='xs'>
@@ -17,7 +22,6 @@ export default function ItemPerPage({handlePageLimitChange}: ItemPerPageProps) {
                         allowDeselect={false}
                         onChange={(value) => handlePageLimitChange(parseInt(value))}/>
             </Stack>
-
         </>
     );
 }

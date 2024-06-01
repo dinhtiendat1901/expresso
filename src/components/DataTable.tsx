@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Table, Checkbox, Button, Group} from '@mantine/core';
 import axios from 'axios';
-import {PageState} from "../page/HomePage.tsx";
 import {convertDateTime} from "../utils/utils.ts";
+import {useAppSelector} from "../store";
 
 
 interface Profile {
@@ -12,12 +12,9 @@ interface Profile {
     created_date: string;
 }
 
-interface DataTableProps {
-    pageState: PageState;
-}
 
-
-export default function DataTable({pageState}: DataTableProps) {
+export default function DataTable() {
+    const pageState = useAppSelector(state => state.page);
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
     const [data, setData] = useState<Profile[]>([]);
     useEffect(() => {

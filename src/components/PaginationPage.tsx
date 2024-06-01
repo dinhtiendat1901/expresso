@@ -1,14 +1,13 @@
 import {Group, Pagination} from '@mantine/core';
-import {PageState} from "../page/HomePage.tsx";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {useAppDispatch, useAppSelector} from "../store";
+import pageSlice from "../store/page-slice.ts";
 
-interface PaginationPageProps {
-    pageState: PageState;
-    handlePageChange: (page: number) => void;
-}
 
-export default function PaginationPage({pageState, handlePageChange}: PaginationPageProps) {
+export default function PaginationPage() {
+    const pageState = useAppSelector(state => state.page);
+    const dispatch = useAppDispatch();
     const [total, setTotal] = useState<number>();
 
     useEffect(() => {
@@ -20,9 +19,13 @@ export default function PaginationPage({pageState, handlePageChange}: Pagination
         fetchData().then()
     }, [pageState.currentPage]);
 
+    function handleCurrentPageChange(page: number) {
+        dispatch(pageSlice.actions.changeCurrentPage(page))
+    }
+
 
     return (
-        <Pagination.Root total={Math.ceil(total / pageState.pageLimit)} onChange={handlePageChange}
+        <Pagination.Root total={Math.ceil(total / pageState.pageLimit)} onChange={handleCurrentPageChange}
                          value={pageState.currentPage}>
             <Group gap={5} justify="center">
                 <Pagination.Previous/>
