@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Table, Checkbox, Button, Group} from '@mantine/core';
+import {Table, Checkbox, Button} from '@mantine/core';
 import axios from 'axios';
 import {convertDateTime} from "../utils/utils.ts";
 import {useAppSelector} from "../store";
-import {IconPhoto, IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
+import {IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
 
 
 interface Profile {

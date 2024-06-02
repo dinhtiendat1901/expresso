@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 import {AppShell, MantineProvider} from '@mantine/core';
 import HomePage from "./page/HomePage.tsx";
 import Navbar from "./page/Navbar.tsx";
+import DialogMessage from "./components/DialogMessage.tsx";
 
 export default function App() {
     return <MantineProvider>
@@ -19,5 +20,6 @@ export default function App() {
                 <HomePage/>
             </AppShell.Main>
         </AppShell>
+        <DialogMessage/>
     </MantineProvider>
 }

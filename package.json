@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mantine/core": "^7.10.0",
+    "@mantine/form": "^7.10.1",
     "@mantine/hooks": "^7.10.0",
     "@reduxjs/toolkit": "^2.2.5",
     "@tabler/icons-react": "^3.5.0",
