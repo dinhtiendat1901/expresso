@@ -4,6 +4,7 @@ import axios from 'axios';
 import {convertDateTime} from "../utils/utils.ts";
 import {useAppSelector} from "../store";
 import {IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
+import {useListState} from "@mantine/hooks";
 
 
 interface Profile {
@@ -13,11 +14,17 @@ interface Profile {
     created_date: string;
 }
 
+interface CheckboxItem {
+    checked: boolean;
+    key: number
+}
+
 
 export default function DataTable() {
+    console.log('render')
     const pageState = useAppSelector(state => state.page);
-    const [selectedRows, setSelectedRows] = useState<number[]>([]);
     const [data, setData] = useState<Profile[]>([]);
+    const [listCheckboxItems, checkboxHandlers] = useListState<CheckboxItem>([]);
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get('http://127.0.0.1:8000/profiles', {
@@ -27,10 +34,19 @@ export default function DataTable() {
                 }
             });
             setData(response.data)
+            checkboxHandlers.setState([])
+            response.data.map((profile: Profile) => {
+                checkboxHandlers.append({checked: false, key: profile.id})
+            })
+
         }
 
         fetchData().then()
     }, [pageState]);
+
+    const allChecked = listCheckboxItems.every((value) => value.checked);
+    console.log(listCheckboxItems)
+    const indeterminate = listCheckboxItems.some((value) => value.checked) && !allChecked;
 
 
     return (
@@ -38,7 +54,15 @@ export default function DataTable() {
             <Table.Thead>
                 <Table.Tr>
                     <Table.Th w={50}>
-                        <Checkbox aria-label="Select row"/>
+                        <Checkbox
+                            checked={allChecked}
+                            indeterminate={indeterminate}
+                            onChange={() =>
+                                checkboxHandlers.setState((current) =>
+                                    current.map((value) => ({...value, checked: !allChecked}))
+                                )
+                            }
+                        />
                     </Table.Th>
                     <Table.Th w={50}>ID</Table.Th>
                     <Table.Th w={'20%'}>Name</Table.Th>
@@ -47,20 +71,17 @@ export default function DataTable() {
                     <Table.Th w={250}>Action</Table.Th>
                 </Table.Tr>
             </Table.Thead>
-            <Table.Tbody>{data.map((profile) => (
+            <Table.Tbody>{data.map((profile, index) => (
                 <Table.Tr
                     key={profile.id}
-                    bg={selectedRows.includes(profile.id) ? 'var(--mantine-color-blue-light)' : undefined}>
+                    bg={listCheckboxItems[index].checked ? 'var(--mantine-color-blue-light)' : undefined}>
                     <Table.Td>
                         <Checkbox
                             aria-label="Select row"
-                            checked={selectedRows.includes(profile.id)}
-                            onChange={(event) =>
-                                setSelectedRows(
-                                    event.currentTarget.checked
-                                        ? [...selectedRows, profile.id]
-                                        : selectedRows.filter((id) => id !== profile.id)
-                                )}/>
+                            checked={listCheckboxItems[index].checked}
+                            key={listCheckboxItems[index].key}
+                            onChange={(event) => checkboxHandlers.setItemProp(index, 'checked', event.currentTarget.checked)}
+                        />
                     </Table.Td>
                     <Table.Td>{profile.id}</Table.Td>
                     <Table.Td>{profile.name}</Table.Td>
