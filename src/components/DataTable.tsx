@@ -2,29 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {Table, Checkbox, Button} from '@mantine/core';
 import axios from 'axios';
 import {convertDateTime} from "../utils/utils.ts";
-import {useAppSelector} from "../store";
+import {useAppDispatch, useAppSelector} from "../store";
 import {IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
-import {useListState} from "@mantine/hooks";
+import checkboxSlice from "../store/checkbox-slice.ts";
 
 
-interface Profile {
+export interface Profile {
     id: number;
     name: string;
     description: string;
     created_date: string;
 }
 
-interface CheckboxItem {
-    checked: boolean;
-    key: number
-}
-
 
 export default function DataTable() {
-    console.log('render')
+    const dispatch = useAppDispatch()
+    const checkboxState = useAppSelector(state => state.checkbox.listCheckbox);
     const pageState = useAppSelector(state => state.page);
     const [data, setData] = useState<Profile[]>([]);
-    const [listCheckboxItems, checkboxHandlers] = useListState<CheckboxItem>([]);
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get('http://127.0.0.1:8000/profiles', {
@@ -33,20 +28,14 @@ export default function DataTable() {
                     limit: pageState.pageLimit
                 }
             });
+            dispatch(checkboxSlice.actions.initListCheckbox(response.data))
             setData(response.data)
-            checkboxHandlers.setState([])
-            response.data.map((profile: Profile) => {
-                checkboxHandlers.append({checked: false, key: profile.id})
-            })
-
         }
 
         fetchData().then()
     }, [pageState]);
-
-    const allChecked = listCheckboxItems.every((value) => value.checked);
-    console.log(listCheckboxItems)
-    const indeterminate = listCheckboxItems.some((value) => value.checked) && !allChecked;
+    const allChecked = checkboxState.every((value) => value.checked);
+    const indeterminate = checkboxState.some((value) => value.checked) && !allChecked;
 
 
     return (
@@ -58,9 +47,7 @@ export default function DataTable() {
                             checked={allChecked}
                             indeterminate={indeterminate}
                             onChange={() =>
-                                checkboxHandlers.setState((current) =>
-                                    current.map((value) => ({...value, checked: !allChecked}))
-                                )
+                                dispatch(checkboxSlice.actions.selectAll())
                             }
                         />
                     </Table.Th>
@@ -74,13 +61,16 @@ export default function DataTable() {
             <Table.Tbody>{data.map((profile, index) => (
                 <Table.Tr
                     key={profile.id}
-                    bg={listCheckboxItems[index].checked ? 'var(--mantine-color-blue-light)' : undefined}>
+                    bg={checkboxState[index].checked ? 'var(--mantine-color-blue-light)' : undefined}>
                     <Table.Td>
                         <Checkbox
                             aria-label="Select row"
-                            checked={listCheckboxItems[index].checked}
-                            key={listCheckboxItems[index].key}
-                            onChange={(event) => checkboxHandlers.setItemProp(index, 'checked', event.currentTarget.checked)}
+                            checked={checkboxState[index].checked}
+                            key={checkboxState[index].key}
+                            onChange={(event) => dispatch(checkboxSlice.actions.changeCheckbox({
+                                key: profile.id,
+                                checked: event.currentTarget.checked
+                            }))}
                         />
                     </Table.Td>
                     <Table.Td>{profile.id}</Table.Td>
