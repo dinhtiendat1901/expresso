@@ -5,7 +5,7 @@ import {useEffect} from "react";
 
 export default function DialogMessage() {
     const dialogState = useAppSelector(state => state.dialog);
-    const [opened, dialogCtl] = useDisclosure(false);
+    const [dialogOpened, dialogCtl] = useDisclosure(false);
     const closeDialogTimer = useTimeout(() => dialogCtl.close(), 11000);
     const reOpenDialogTimer = useTimeout(() => {
         dialogCtl.open()
@@ -14,7 +14,7 @@ export default function DialogMessage() {
     }, 500);
     useEffect(() => {
         if (dialogState.id) {
-            if (opened) {
+            if (dialogOpened) {
                 dialogCtl.close();
                 reOpenDialogTimer.start()
             } else {
@@ -26,7 +26,7 @@ export default function DialogMessage() {
 
     return (
         <>
-            <Dialog opened={opened} onClose={dialogCtl.close} size="lg" radius="md" withBorder={false} p={0}>
+            <Dialog opened={dialogOpened} onClose={dialogCtl.close} size="lg" radius="md" withBorder={false} p={0}>
                 <Notification color={dialogState.status === 'Success' ? 'blue' : 'red'}
                               title={dialogState.status === 'Success' ? 'Successfully' : 'Failed'}
                               withCloseButton={false} withBorder>
