@@ -25,8 +25,8 @@ export default function PaginationPage() {
 
     return (
         <Pagination.Root total={Math.ceil(pageState.total / pageState.pageLimit)} onChange={handleCurrentPageChange}
-                         value={pageState.currentPage}>
-            <Group gap={5} justify="center">
+                         value={pageState.currentPage} radius='lg'>
+            <Group gap={10} justify="center">
                 <Pagination.Previous/>
                 <Pagination.Items/>
                 <Pagination.Next/>

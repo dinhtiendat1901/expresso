@@ -1,5 +1,5 @@
 import {useDisclosure, useTimeout} from '@mantine/hooks';
-import {Dialog, Notification} from '@mantine/core';
+import {Dialog, Notification, Text} from '@mantine/core';
 import {useAppSelector} from "../store";
 import {useEffect} from "react";
 
@@ -28,9 +28,8 @@ export default function DialogMessage() {
         <>
             <Dialog opened={dialogOpened} onClose={dialogCtl.close} size="lg" radius="md" withBorder={false} p={0}>
                 <Notification color={dialogState.status === 'Success' ? 'blue' : 'red'}
-                              title={dialogState.status === 'Success' ? 'Successfully' : 'Failed'}
                               withCloseButton={false} withBorder>
-                    {dialogState.message}
+                    <Text fw={700}>{dialogState.message}</Text>
                 </Notification>
             </Dialog>
         </>

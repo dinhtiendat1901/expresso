@@ -2,7 +2,7 @@ import {Button, Checkbox, Table} from "@mantine/core";
 import checkboxSlice from "../store/checkbox-slice.ts";
 import {convertDateTime} from "../utils/utils.ts";
 import {IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
-import React from "react";
+import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../store";
 import {Profile} from "./DataTable.tsx";
 import DeleteModal from "./DeleteModal.tsx";
@@ -16,6 +16,13 @@ export default function TableBody({data}: TableBodyProp) {
     const dispatch = useAppDispatch()
     const checkboxState = useAppSelector(state => state.checkbox.listCheckbox);
     const [deleteModalOpened, deleteModalCtl] = useDisclosure(false);
+    const [deleteProfileId, setDeleteProfileId] = useState(0);
+
+    function handleClickDelete(id: number) {
+        setDeleteProfileId(id);
+        deleteModalCtl.open()
+    }
+
     return (
 
         <>
@@ -44,13 +51,15 @@ export default function TableBody({data}: TableBodyProp) {
                                 <IconPlayerPlay size={21}/>
                             </Button>
                             <Button variant='subtle' pl='5' pr='5' color='black'><IconSettings size={21}/></Button>
-                            <Button variant='subtle' color='red' pl='5' pr='5' onClick={deleteModalCtl.open}><IconTrash
+                            <Button variant='subtle' color='red' pl='5' pr='5' onClick={() => {
+                                handleClickDelete(profile.id)
+                            }}><IconTrash
                                 size={21}/></Button>
                         </Button.Group>
                     </Table.Td>
                 </Table.Tr>))
             }</Table.Tbody>
-            <DeleteModal opened={deleteModalOpened} close={deleteModalCtl.close}/>
+            <DeleteModal opened={deleteModalOpened} close={deleteModalCtl.close} profileId={deleteProfileId}/>
         </>
     )
 }
