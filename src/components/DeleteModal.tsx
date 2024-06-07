@@ -3,8 +3,7 @@ import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";
 import axios from "axios";
 import {useAppDispatch} from "../store";
 import pageSlice from "../store/page-slice.ts";
-import dialogSlice from "../store/dialog-slice.ts";
-import {randomId} from "@mantine/hooks";
+import {showNotification} from "../utils/utils.ts";
 
 interface DeleteModalProp {
     close: () => void;
@@ -21,11 +20,7 @@ export default function DeleteModal({close, opened, profileId}: DeleteModalProp)
         });
         dispatch(pageSlice.actions.changeTotal(-1));
         close();
-        dispatch(dialogSlice.actions.pushMessage({
-            id: randomId(),
-            message: 'Deleted',
-            status: 'Success'
-        }))
+        showNotification('Deleted')
     }
 
     return (

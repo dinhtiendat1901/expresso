@@ -1,3 +1,5 @@
+import {notifications} from "@mantine/notifications";
+
 export function convertDateTime(input: string): string {
     const date = new Date(input);
 
@@ -12,6 +14,16 @@ export function convertDateTime(input: string): string {
     const year = date.getUTCFullYear();
 
     return `${hours}:${minutes}:${seconds} / ${day}-${month}-${year}`;
+}
+
+
+export function showNotification(message: string, color: string = 'blue') {
+    notifications.show({
+        message,
+        withCloseButton: false,
+        color
+
+    })
 }
 
 

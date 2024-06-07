@@ -1,11 +1,13 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import {AppShell, MantineProvider} from '@mantine/core';
 import HomePage from "./page/HomePage.tsx";
 import Navbar from "./page/Navbar.tsx";
-import DialogMessage from "./components/DialogMessage.tsx";
+import {Notifications} from "@mantine/notifications";
 
 export default function App() {
     return <MantineProvider>
+        <Notifications/>
         <AppShell header={{height: 60}} navbar={{
             width: 300,
             breakpoint: 'sm'
@@ -20,6 +22,5 @@ export default function App() {
                 <HomePage/>
             </AppShell.Main>
         </AppShell>
-        <DialogMessage/>
     </MantineProvider>
 }

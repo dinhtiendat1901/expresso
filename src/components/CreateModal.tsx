@@ -2,9 +2,8 @@ import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
 import axios from "axios";
 import {useAppDispatch} from "../store";
-import dialogSlice from "../store/dialog-slice.ts";
-import {randomId} from "@mantine/hooks";
 import pageSlice from "../store/page-slice.ts";
+import {showNotification} from "../utils/utils.ts";
 
 interface FormValue {
     name: string,
@@ -41,11 +40,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
         form.reset();
         close();
         dispatch(pageSlice.actions.changeTotal(1))
-        dispatch(dialogSlice.actions.pushMessage({
-            id: randomId(),
-            message: 'Created',
-            status: "Success"
-        }))
+        showNotification('Created')
     }
 
     return (
