@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Table} from '@mantine/core';
+import {ScrollArea, Table} from '@mantine/core';
 import axios from 'axios';
 import {useAppDispatch, useAppSelector} from "../store";
 import checkboxSlice from "../store/checkbox-slice.ts";
@@ -16,6 +16,7 @@ export interface Profile {
 
 
 export default function DataTable() {
+    const [scrolled, setScrolled] = useState(false);
     const dispatch = useAppDispatch()
     const pageState = useAppSelector(state => state.page);
     const [data, setData] = useState<Profile[]>([]);
@@ -36,9 +37,11 @@ export default function DataTable() {
 
 
     return (
-        <Table withRowBorders={false} highlightOnHover withColumnBorders>
-            <TableHeader/>
-            <TableBody data={data}/>
-        </Table>
+        <ScrollArea h={700} onScrollPositionChange={({y}) => setScrolled(y !== 0)}>
+            <Table withRowBorders={false} highlightOnHover withColumnBorders>
+                <TableHeader scrolled={scrolled}/>
+                <TableBody data={data}/>
+            </Table>
+        </ScrollArea>
     );
 }
