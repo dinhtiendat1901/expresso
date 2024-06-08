@@ -38,7 +38,7 @@ export default function DataTable() {
 
     return (
         <ScrollArea h={700} onScrollPositionChange={({y}) => setScrolled(y !== 0)}>
-            <Table withRowBorders={false} highlightOnHover withColumnBorders>
+            <Table striped>
                 <TableHeader scrolled={scrolled}/>
                 <TableBody data={data}/>
             </Table>
