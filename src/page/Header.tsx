@@ -16,9 +16,15 @@ export default function Header() {
     const [endDate, setendDate] = useState<Date | null>(null);
 
     function handleClickSearch() {
+        const newStartDate = startDate ? new Date(startDate) : null;
+        const newEndDate = endDate ? new Date(endDate) : null;
+        if (newStartDate)
+            newStartDate.setDate(newStartDate.getDate() + 1);
+        if (newEndDate)
+            newEndDate.setDate(newEndDate.getDate() + 1);
         dispatch(pageSlice.actions.changeCondition({
-            startDate: startDate ? startDate.toISOString().split('T')[0] : null,
-            endDate: endDate ? endDate.toISOString().split('T')[0] : null,
+            startDate: newStartDate ? newStartDate.toISOString().split('T')[0] : null,
+            endDate: newEndDate ? newEndDate.toISOString().split('T')[0] : null,
             search
         }))
     }
