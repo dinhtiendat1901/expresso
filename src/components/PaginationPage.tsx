@@ -11,12 +11,18 @@ export default function PaginationPage() {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await axios.get('http://127.0.0.1:8000/profiles/total');
+            const response = await axios.get('http://127.0.0.1:8000/profiles/total', {
+                params: {
+                    search: pageState.search,
+                    start_date: pageState.startDate,
+                    end_date: pageState.endDate
+                }
+            });
             dispatch(pageSlice.actions.updateTotal(response.data))
         }
 
         fetchData().then()
-    }, [pageState.currentPage]);
+    }, [pageState.currentPage, pageState.search, pageState.startDate, pageState.endDate, pageState.pageLimit]);
 
     function handleCurrentPageChange(page: number) {
         dispatch(pageSlice.actions.changeCurrentPage(page))

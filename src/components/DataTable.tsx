@@ -25,7 +25,10 @@ export default function DataTable() {
             const response = await axios.get('http://127.0.0.1:8000/profiles', {
                 params: {
                     skip: (pageState.currentPage - 1) * pageState.pageLimit,
-                    limit: pageState.pageLimit
+                    limit: pageState.pageLimit,
+                    search: pageState.search,
+                    start_date: pageState.startDate,
+                    end_date: pageState.endDate
                 }
             });
             dispatch(checkboxSlice.actions.initListCheckbox(response.data))
