@@ -5,6 +5,6 @@ diesel::table! {
         name -> Nullable<Varchar>,
         #[max_length = 100]
         description -> Nullable<Varchar>,
-        createdDate -> Nullable<Timestamp>,
+        created_date -> Nullable<Timestamp>,
     }
 }

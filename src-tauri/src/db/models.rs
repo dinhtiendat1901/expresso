@@ -10,7 +10,7 @@ pub struct Profile {
     pub id: i32,
     pub name: Option<String>,
     pub description: Option<String>,
-    pub createdDate: Option<NaiveDateTime>,
+    pub created_date: Option<NaiveDateTime>,
 }
 
 // Struct used for creating new profiles
