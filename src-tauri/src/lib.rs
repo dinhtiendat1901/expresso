@@ -1,9 +1,5 @@
 mod commands;
-mod config;
 mod db;
-mod events;
-mod plugins;
-mod security;
+mod repositories;
+mod services;
 mod utils;
-mod file_system;
-mod http_client;
