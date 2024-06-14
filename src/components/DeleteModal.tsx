@@ -1,9 +1,9 @@
 import {ActionIcon, Group, Modal, Stack, Text} from "@mantine/core";
 import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";
-import axios from "axios";
 import {useAppDispatch} from "../store";
 import pageSlice from "../store/page-slice.ts";
 import {showNotification} from "../utils/utils.ts";
+import {invoke} from "@tauri-apps/api";
 
 interface DeleteModalProp {
     close: () => void;
@@ -15,8 +15,8 @@ export default function DeleteModal({close, opened, profileId}: DeleteModalProp)
     const dispatch = useAppDispatch()
 
     async function handleClickConfirm() {
-        await axios.delete('http://127.0.0.1:8000/profiles', {
-            data: [profileId]
+        await invoke('delete_profiles', {
+            profileIds: [profileId]
         });
         dispatch(pageSlice.actions.changeTotal(-1));
         close();

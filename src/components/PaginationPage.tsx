@@ -1,8 +1,8 @@
 import {Group, Pagination} from '@mantine/core';
 import React, {useEffect} from "react";
-import axios from "axios";
 import {useAppDispatch, useAppSelector} from "../store";
 import pageSlice from "../store/page-slice.ts";
+import {invoke} from "@tauri-apps/api";
 
 
 export default function PaginationPage() {
@@ -11,14 +11,12 @@ export default function PaginationPage() {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await axios.get('http://127.0.0.1:8000/profiles/total', {
-                params: {
-                    search: pageState.search,
-                    start_date: pageState.startDate,
-                    end_date: pageState.endDate
-                }
+            const total: number = await invoke('read_total_profiles', {
+                search: pageState.search,
+                startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
+                endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null,
             });
-            dispatch(pageSlice.actions.updateTotal(response.data))
+            dispatch(pageSlice.actions.updateTotal(total))
         }
 
         fetchData().then()

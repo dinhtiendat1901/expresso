@@ -1,9 +1,9 @@
 import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import axios from "axios";
 import {useAppDispatch} from "../store";
 import pageSlice from "../store/page-slice.ts";
 import {showNotification} from "../utils/utils.ts";
+import {invoke} from "@tauri-apps/api";
 
 interface FormValue {
     name: string,
@@ -33,7 +33,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
     });
 
     async function handleCreate(values: FormValue) {
-        await axios.post('http://127.0.0.1:8000/profiles', {
+        await invoke('create_profile', {
             name: values.name,
             description: values.description
         });
