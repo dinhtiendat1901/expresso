@@ -16,12 +16,12 @@ pub fn get_total_profiles(search: Option<String>, start_date: Option<NaiveDate>,
 
     if let Some(start_date) = start_date {
         if let Some(end_date) = end_date {
-            query = query.filter(created_date.between(start_date.and_hms(0, 0, 0), end_date.and_hms(23, 59, 59)));
+            query = query.filter(created_date.between(start_date.and_hms_opt(0, 0, 0), end_date.and_hms_opt(23, 59, 59)));
         } else {
-            query = query.filter(created_date.ge(start_date.and_hms(0, 0, 0)));
+            query = query.filter(created_date.ge(start_date.and_hms_opt(0, 0, 0)));
         }
     } else if let Some(end_date) = end_date {
-        query = query.filter(created_date.le(end_date.and_hms(23, 59, 59)));
+        query = query.filter(created_date.le(end_date.and_hms_opt(23, 59, 59)));
     }
 
     query.count().get_result::<i64>(&mut conn).map(|count| count as i32)
@@ -42,12 +42,12 @@ pub fn list_profiles(skip: i64, limit: i64, search: Option<String>, start_date: 
 
     if let Some(start_date) = start_date {
         if let Some(end_date) = end_date {
-            query = query.filter(created_date.between(start_date.and_hms(0, 0, 0), end_date.and_hms(23, 59, 59)));
+            query = query.filter(created_date.between(start_date.and_hms_opt(0, 0, 0), end_date.and_hms_opt(23, 59, 59)));
         } else {
-            query = query.filter(created_date.ge(start_date.and_hms(0, 0, 0)));
+            query = query.filter(created_date.ge(start_date.and_hms_opt(0, 0, 0)));
         }
     } else if let Some(end_date) = end_date {
-        query = query.filter(created_date.le(end_date.and_hms(23, 59, 59)));
+        query = query.filter(created_date.le(end_date.and_hms_opt(23, 59, 59)));
     }
 
     query = query.order_by(created_date.desc());
