@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE Profile
+CREATE TABLE profile
 (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     name         VARCHAR(100),
