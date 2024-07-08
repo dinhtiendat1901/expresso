@@ -1,28 +1,33 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
-import {AppShell, MantineProvider} from '@mantine/core';
-import HomePage from "./page/HomePage.tsx";
-import Navbar from "./page/Navbar.tsx";
+import {MantineProvider} from '@mantine/core';
 import {Notifications} from "@mantine/notifications";
-import Header from "./page/Header.tsx";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import RootPage from "./page/RootPage.tsx";
+import HomePage from "./page/HomePage.tsx";
+import SettingPage from "./page/SettingPage.tsx";
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <RootPage/>,
+        children: [
+            {
+                index: true,
+                element: <HomePage/>
+            },
+            {
+                path: 'settings',
+                element: <SettingPage/>
+            }
+        ]
+    }
+])
 
 export default function App() {
     return <MantineProvider>
         <Notifications/>
-        <AppShell header={{height: 150}} navbar={{
-            width: 300,
-            breakpoint: 'sm'
-        }} padding="md">
-            <AppShell.Header p="md">
-                <Header/>
-            </AppShell.Header>
-            <AppShell.Navbar p="md">
-                <Navbar/>
-            </AppShell.Navbar>
-            <AppShell.Main>
-                <HomePage/>
-            </AppShell.Main>
-        </AppShell>
+        <RouterProvider router={router}/>
     </MantineProvider>
 }

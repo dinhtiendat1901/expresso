@@ -1,4 +1,4 @@
-import {ActionIcon, Group, Space, Stack, TextInput} from "@mantine/core";
+import {ActionIcon, Group, Space, TextInput} from "@mantine/core";
 import {useState} from "react";
 import {DateInput} from "@mantine/dates";
 import dayjs from 'dayjs';
@@ -9,7 +9,7 @@ import pageSlice from "../store/page-slice.ts";
 
 dayjs.extend(customParseFormat);
 
-export default function Header() {
+export default function SearchArea() {
     const dispatch = useAppDispatch();
     const [search, setSearch] = useState('');
     const [startDate, setstartDate] = useState<Date | null>(null);
@@ -42,7 +42,7 @@ export default function Header() {
 
     return (
         <>
-            <Stack>
+            <Group>
                 <Group justify='flex-end'>
                     <Group>
                         <IconAbc/>
@@ -78,7 +78,7 @@ export default function Header() {
                         <IconRefresh style={{width: '60%', height: '60%'}} stroke={3}/>
                     </ActionIcon>
                 </Group>
-            </Stack>
+            </Group>
         </>
 
     )
