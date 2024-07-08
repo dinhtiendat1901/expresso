@@ -1,7 +1,6 @@
--- Your SQL goes here
 CREATE TABLE profile
 (
-    id           INT AUTO_INCREMENT PRIMARY KEY,
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
     name         VARCHAR(100),
     description  VARCHAR(100),
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP

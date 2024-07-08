@@ -616,13 +616,10 @@ version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62d6dcd069e7b5fe49a302411f759d4cf1cf2c27fe798ef46fb8baefc053dd2b"
 dependencies = [
-    "bitflags 2.5.0",
-    "byteorder",
     "chrono",
     "diesel_derives",
-    "mysqlclient-sys",
-    "percent-encoding",
-    "url",
+    "libsqlite3-sys",
+    "time",
 ]
 
 [[package]]
@@ -1698,6 +1695,16 @@ checksum = "c0ff37bd590ca25063e35af745c343cb7a0271906fb7b37e4813e8f79f00268d"
 dependencies = [
     "bitflags 2.5.0",
     "libc",
+]
+
+[[package]]
+name = "libsqlite3-sys"
+version = "0.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c10584274047cb335c23d3e61bcef8e323adae7c5c8c760540f73610177fc3f"
+dependencies = [
+    "pkg-config",
+    "vcpkg",
 ]
 
 [[package]]
