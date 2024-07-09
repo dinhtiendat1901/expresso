@@ -8,3 +8,10 @@ diesel::table! {
         created_date -> Nullable<Timestamp>,
     }
 }
+
+diesel::table! {
+    config (id) {
+        id -> Integer,
+        path -> Nullable<Text>,
+    }
+}

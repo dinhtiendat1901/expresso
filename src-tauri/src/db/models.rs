@@ -2,6 +2,7 @@ use chrono::NaiveDateTime;
 use diesel::{AsChangeset, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
+use super::schema::config;
 use super::schema::profile;
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
@@ -27,4 +28,11 @@ pub struct NewProfile {
 pub struct UpdateProfile {
     pub name: Option<String>,
     pub description: Option<String>,
+}
+
+#[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
+#[diesel(table_name = config)]
+pub struct Config {
+    pub id: i32,
+    pub path: Option<String>,
 }

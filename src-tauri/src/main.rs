@@ -15,6 +15,8 @@ fn main() {
             commands::profile_commands::read_profiles,
             commands::profile_commands::update_profile,
             commands::profile_commands::delete_profiles,
+            commands::config_commands::get_config,
+            commands::config_commands::set_config
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
