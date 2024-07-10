@@ -4,7 +4,8 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "expresso",
@@ -23,6 +24,13 @@
       },
       "path": {
         "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": [
+          "http://localhost:3000/*"
+        ]
       }
     },
     "bundle": {
@@ -50,7 +58,8 @@
         "signingIdentity": null
       },
       "resources": [
-        "db.sqlite"
+        "db.sqlite",
+        "binaries/puppeteer-server-win.exe"
       ],
       "shortDescription": "",
       "targets": "all",

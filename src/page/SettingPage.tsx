@@ -22,7 +22,7 @@ export default function SettingPage() {
             directory: true
         });
         if (selectPath !== path && selectPath) {
-            setDisplayPath(selectPath as string)
+            setDisplayPath((selectPath as string).replace(/\\/g, '/'))
             setPathIsChanged(true)
         }
 

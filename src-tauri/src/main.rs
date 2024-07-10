@@ -1,12 +1,19 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::process::{Command, Stdio};
+
 mod commands;
 mod db;
 mod services;
 mod repositories;
 
 fn main() {
+    Command::new("./binaries/puppeteer-server-win.exe")
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()
+        .expect("Failed to start external module");
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::profile_commands::read_total_profiles,

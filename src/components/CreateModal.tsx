@@ -1,9 +1,10 @@
 import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import {useAppDispatch} from "../store";
+import {useAppDispatch, useAppSelector} from "../store";
 import pageSlice from "../store/page-slice.ts";
 import {showNotification} from "../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
+import {fetch, ResponseType} from '@tauri-apps/api/http';
 
 interface FormValue {
     name: string,
@@ -22,6 +23,7 @@ interface CreateModalProp {
 
 
 export default function CreateModal({close, opened}: CreateModalProp) {
+    const path = useAppSelector(state => state.config.path)
     const dispatch = useAppDispatch()
     const form = useForm({
         mode: 'uncontrolled',
@@ -33,9 +35,21 @@ export default function CreateModal({close, opened}: CreateModalProp) {
     });
 
     async function handleCreate(values: FormValue) {
+        const response = await fetch<string>('http://localhost:3000/create-profile', {
+            method: 'POST',
+            timeout: 30,
+            body: {
+                type: 'Json',
+                payload: {
+                    path: path
+                }
+            },
+            responseType: ResponseType.Text
+        });
         await invoke('create_profile', {
             name: values.name,
-            description: values.description
+            description: values.description,
+            path: response.data
         });
         form.reset();
         close();
