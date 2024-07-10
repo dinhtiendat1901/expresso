@@ -12,6 +12,7 @@ pub struct Profile {
     pub name: Option<String>,
     pub description: Option<String>,
     pub created_date: Option<NaiveDateTime>,
+    pub path: Option<String>,
 }
 
 // Struct used for creating new profiles
@@ -20,6 +21,7 @@ pub struct Profile {
 pub struct NewProfile {
     pub name: Option<String>,
     pub description: Option<String>,
+    pub path: Option<String>,
 }
 
 // Struct used for updating profiles
@@ -28,6 +30,7 @@ pub struct NewProfile {
 pub struct UpdateProfile {
     pub name: Option<String>,
     pub description: Option<String>,
+    pub path: Option<String>,
 }
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
