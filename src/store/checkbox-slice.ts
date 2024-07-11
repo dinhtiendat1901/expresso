@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Profile} from "../components/DataTable.tsx";
+import {Profile} from "./data-slice.ts";
 
 interface CheckboxState {
     listCheckbox: CheckboxItem[]

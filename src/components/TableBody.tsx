@@ -1,30 +1,39 @@
-import {Button, Checkbox, Table} from "@mantine/core";
+import {Checkbox, Table} from "@mantine/core";
 import checkboxSlice from "../store/checkbox-slice.ts";
 import {convertDateTime} from "../utils/utils.ts";
-import {IconPlayerPlay, IconSettings, IconTrash} from "@tabler/icons-react";
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../store";
-import {Profile} from "./DataTable.tsx";
-import DeleteModal from "./DeleteModal.tsx";
-import {useDisclosure} from "@mantine/hooks";
+import dataSlice, {Profile} from "../store/data-slice.ts";
+import {invoke} from "@tauri-apps/api";
+import ProfileAction from "./ProfileAction.tsx";
 
-interface TableBodyProp {
-    data: Profile[]
-}
 
-export default function TableBody({data}: TableBodyProp) {
+export default function TableBody() {
     const dispatch = useAppDispatch()
     const checkboxState = useAppSelector(state => state.checkbox.listCheckbox);
-    const [deleteModalOpened, deleteModalCtl] = useDisclosure(false);
-    const [deleteProfileId, setDeleteProfileId] = useState(0);
 
-    function handleClickDelete(id: number) {
-        setDeleteProfileId(id);
-        deleteModalCtl.open()
-    }
+
+    const pageState = useAppSelector(state => state.page);
+    const data = useAppSelector(state => state.data.listProfiles);
+
+
+    useEffect(() => {
+        async function fetchData() {
+            const response: Profile[] = await invoke('read_profiles', {
+                skip: (pageState.currentPage - 1) * pageState.pageLimit,
+                limit: pageState.pageLimit,
+                search: pageState.search,
+                startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
+                endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null
+            });
+            dispatch(checkboxSlice.actions.initListCheckbox(response))
+            dispatch(dataSlice.actions.setData(response))
+        }
+
+        fetchData().then()
+    }, [pageState]);
 
     return (
-
         <>
             <Table.Tbody>{data.map((profile, index) => (
                 <Table.Tr
@@ -46,20 +55,10 @@ export default function TableBody({data}: TableBodyProp) {
                     <Table.Td>{profile.description}</Table.Td>
                     <Table.Td>{convertDateTime(profile.created_date)}</Table.Td>
                     <Table.Td>
-                        <Button.Group>
-                            <Button variant='subtle' pl='5' pr='5'>
-                                <IconPlayerPlay size={21}/>
-                            </Button>
-                            <Button variant='subtle' pl='5' pr='5' color='black'><IconSettings size={21}/></Button>
-                            <Button variant='subtle' color='red' pl='5' pr='5' onClick={() => {
-                                handleClickDelete(profile.id)
-                            }}><IconTrash
-                                size={21}/></Button>
-                        </Button.Group>
+                        <ProfileAction profile={profile}/>
                     </Table.Td>
                 </Table.Tr>))
             }</Table.Tbody>
-            <DeleteModal opened={deleteModalOpened} close={deleteModalCtl.close} profileId={deleteProfileId}/>
         </>
     )
 }

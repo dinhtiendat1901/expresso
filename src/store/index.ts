@@ -3,12 +3,14 @@ import pageSlice from "./page-slice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import checkboxSlice from "./checkbox-slice.ts";
 import ConfigSlice from "./config-slice.ts";
+import DataSlice from "./data-slice.ts";
 
 const store = configureStore({
     reducer: {
         page: pageSlice.reducer,
         checkbox: checkboxSlice.reducer,
-        config: ConfigSlice.reducer
+        config: ConfigSlice.reducer,
+        data: DataSlice.reducer
     }
 })
 
