@@ -25,6 +25,9 @@ const dataSlice = createSlice({
     reducers: {
         setData(state, action: PayloadAction<Profile[]>) {
             state.listProfiles = action.payload
+        },
+        setRunning(state, action: PayloadAction<{ id: number, running: boolean }>) {
+            state.listProfiles.find(profile => profile.id == action.payload.id).running = action.payload.running
         }
     }
 })

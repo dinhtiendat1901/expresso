@@ -5,6 +5,8 @@ import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api";
 import {useAppDispatch} from "../store";
 import ConfigSlice from "../store/config-slice.ts";
+import {io} from "socket.io-client";
+import dataSlice from "../store/data-slice.ts";
 
 interface Config {
     id: number,
@@ -21,6 +23,16 @@ export default function RootPage() {
         }
 
         fetchConfig().then();
+    }, []);
+
+    useEffect(() => {
+        const socket = io('http://localhost:3000');
+        socket.on('close-profile', (profileId) => {
+            dispatch(dataSlice.actions.setRunning({
+                id: profileId,
+                running: false
+            }));
+        })
     }, []);
 
     return <AppShell navbar={{
