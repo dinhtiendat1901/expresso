@@ -35,7 +35,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
     });
 
     async function handleCreate(values: FormValue) {
-        const response = await fetch<string>('http://localhost:3000/create-profile', {
+        const response = await fetch<string>(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/create-profile`, {
             method: 'POST',
             timeout: 30,
             body: {

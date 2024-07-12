@@ -26,7 +26,7 @@ export default function RootPage() {
     }, []);
 
     useEffect(() => {
-        const socket = io('http://localhost:3000');
+        const socket = io(import.meta.env.VITE_PUPPETEER_SERVER_URL);
         socket.on('close-profile', (profileId) => {
             dispatch(dataSlice.actions.setRunning({
                 id: profileId,

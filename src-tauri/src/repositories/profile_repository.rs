@@ -73,8 +73,18 @@ pub fn update_profile(profile_id: i32, updated_profile: UpdateProfile) -> Result
     profile.find(profile_id).first(&mut conn)
 }
 
-pub fn delete_profiles(profile_ids: Vec<i32>) -> Result<(), Error> {
+pub fn delete_profiles(profile_ids: Vec<i32>) -> Result<Vec<String>, Error> {
     let mut conn = establish_connection();
+
+    // Fetch the paths before deletion
+    let paths: Vec<String> = profile
+        .filter(id.eq_any(&profile_ids))
+        .select(path)
+        .load::<Option<String>>(&mut conn)?
+        .into_iter()
+        .filter_map(|p| p)
+        .collect();
+
     diesel::delete(profile.filter(id.eq_any(profile_ids))).execute(&mut conn)?;
-    Ok(())
+    Ok(paths)
 }

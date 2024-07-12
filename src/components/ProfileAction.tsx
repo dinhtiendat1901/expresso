@@ -22,7 +22,7 @@ export default function ProfileAction({profile}: ProfileActionProp) {
     }
 
     async function handleClickRun() {
-        await fetch('http://localhost:3000/run-profile', {
+        await fetch(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-profile`, {
             method: 'GET',
             timeout: 30,
             query: {

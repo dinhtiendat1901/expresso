@@ -1,3 +1,5 @@
+use std::fs;
+
 use chrono::NaiveDate;
 use diesel::result::Error;
 
@@ -25,5 +27,13 @@ pub fn update_profile_service(profile_id: i32, updated_profile: UpdateProfile) -
 }
 
 pub fn delete_profiles_service(profile_ids: Vec<i32>) -> Result<(), Error> {
-    profile_repository::delete_profiles(profile_ids)
+    let paths = profile_repository::delete_profiles(profile_ids)?;
+
+    for path in paths {
+        if let Err(e) = fs::remove_dir_all(&path) {
+            eprintln!("Failed to remove directory {}: {}", path, e);
+        }
+    }
+
+    Ok(())
 }
