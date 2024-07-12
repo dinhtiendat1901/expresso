@@ -37,10 +37,20 @@ export default function ProfileAction({profile}: ProfileActionProp) {
         }));
     }
 
-    const actionIcon = profile.running ? <ActionIcon variant='subtle' pl='5' pr='5' color='black'><IconPlayerPause
-        size={21}/></ActionIcon> : <ActionIcon variant='subtle' pl='5' pr='5' onClick={handleClickRun}>
-        <IconPlayerPlay size={21}/>
-    </ActionIcon>
+    async function handleClickStop() {
+        await fetch(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/stop-profile/${profile.id}`, {
+            method: 'GET',
+            timeout: 30,
+            responseType: ResponseType.Text
+        });
+    }
+
+
+    const actionIcon = profile.running ?
+        <ActionIcon variant='subtle' pl='5' pr='5' color='black' onClick={handleClickStop}><IconPlayerPause
+            size={21}/></ActionIcon> : <ActionIcon variant='subtle' pl='5' pr='5' onClick={handleClickRun}>
+            <IconPlayerPlay size={21}/>
+        </ActionIcon>
 
     return (
         <>
