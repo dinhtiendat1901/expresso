@@ -1,5 +1,4 @@
 import {Checkbox, Table} from "@mantine/core";
-import checkboxSlice from "../store/checkbox-slice.ts";
 import {convertDateTime} from "../utils/utils.ts";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../store";
@@ -10,23 +9,22 @@ import ProfileAction from "./ProfileAction.tsx";
 
 export default function TableBody() {
     const dispatch = useAppDispatch()
-    const checkboxState = useAppSelector(state => state.checkbox.listCheckbox);
-
-
     const pageState = useAppSelector(state => state.page);
     const data = useAppSelector(state => state.data.listProfiles);
 
 
     useEffect(() => {
         async function fetchData() {
-            const response: Profile[] = await invoke('read_profiles', {
+            let response: Profile[] = await invoke('read_profiles', {
                 skip: (pageState.currentPage - 1) * pageState.pageLimit,
                 limit: pageState.pageLimit,
                 search: pageState.search,
                 startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
                 endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null
             });
-            dispatch(checkboxSlice.actions.initListCheckbox(response))
+            response = response.map(profile => {
+                return {...profile, checked: false}
+            })
             dispatch(dataSlice.actions.setData(response))
         }
 
@@ -35,17 +33,17 @@ export default function TableBody() {
 
     return (
         <>
-            <Table.Tbody>{data.map((profile, index) => (
+            <Table.Tbody>{data.map((profile) => (
                 <Table.Tr
                     key={profile.id}
-                    bg={checkboxState[index].checked ? 'var(--mantine-color-blue-light)' : undefined}>
+                    bg={profile.checked ? 'var(--mantine-color-blue-light)' : undefined}>
                     <Table.Td>
                         <Checkbox
                             aria-label="Select row"
-                            checked={checkboxState[index].checked}
-                            key={checkboxState[index].key}
-                            onChange={(event) => dispatch(checkboxSlice.actions.changeCheckbox({
-                                key: profile.id,
+                            checked={profile.checked}
+                            key={profile.id}
+                            onChange={(event) => dispatch(dataSlice.actions.changeCheckbox({
+                                id: profile.id,
                                 checked: event.currentTarget.checked
                             }))}
                         />

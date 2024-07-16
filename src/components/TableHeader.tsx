@@ -1,15 +1,15 @@
 import {Checkbox, Table} from "@mantine/core";
-import checkboxSlice from "../store/checkbox-slice.ts";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../store";
 import classes from '../css/TableScrollArea.module.css';
 import cx from 'clsx';
+import dataSlice from "../store/data-slice.ts";
 
 export default function TableHeader({scrolled}) {
     const dispatch = useAppDispatch()
-    const checkboxState = useAppSelector(state => state.checkbox.listCheckbox);
-    const allChecked = checkboxState.every((value) => value.checked);
-    const indeterminate = checkboxState.some((value) => value.checked) && !allChecked;
+    const listProfiles = useAppSelector(state => state.data.listProfiles);
+    const allChecked = listProfiles.every((value) => value.checked);
+    const indeterminate = listProfiles.some((value) => value.checked) && !allChecked;
     return (
         <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
             <Table.Tr>
@@ -18,7 +18,7 @@ export default function TableHeader({scrolled}) {
                         checked={allChecked}
                         indeterminate={indeterminate}
                         onChange={() =>
-                            dispatch(checkboxSlice.actions.selectAll())
+                            dispatch(dataSlice.actions.selectAll())
                         }
                     />
                 </Table.Th>
