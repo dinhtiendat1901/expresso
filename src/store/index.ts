@@ -3,12 +3,14 @@ import pageSlice from "./page-slice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import ConfigSlice from "./config-slice.ts";
 import DataSlice from "./data-slice.ts";
+import ScriptSlice from "./script-slice.ts";
 
 const store = configureStore({
     reducer: {
         page: pageSlice.reducer,
         config: ConfigSlice.reducer,
-        data: DataSlice.reducer
+        data: DataSlice.reducer,
+        script: ScriptSlice.reducer
     }
 })
 

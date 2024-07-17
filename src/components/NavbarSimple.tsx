@@ -1,12 +1,13 @@
 import {useState} from 'react';
 import {Code, Group} from '@mantine/core';
-import {IconHome2, IconLogout, IconSettings, IconSwitchHorizontal,} from '@tabler/icons-react';
+import {IconBrandChrome, IconLogout, IconScript, IconSettings, IconSwitchHorizontal,} from '@tabler/icons-react';
 
 import classes from '../css/NavbarSimple.module.css';
 import {Link} from "react-router-dom";
 
 const data = [
-    {link: '/', label: 'Home', icon: IconHome2},
+    {link: '/', label: 'Profiles', icon: IconBrandChrome},
+    {link: '/scripts', label: 'Scripts', icon: IconScript},
     {link: '/settings', label: 'Settings', icon: IconSettings},
 ];
 

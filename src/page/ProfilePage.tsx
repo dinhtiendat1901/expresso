@@ -6,7 +6,7 @@ import SearchArea from "../components/profile/SearchArea.tsx";
 import ActionButton from "../components/profile/ActionButton.tsx";
 
 
-export default function HomePage() {
+export default function ProfilePage() {
 
     return <Stack gap='sm'>
         <Group justify='space-between'>

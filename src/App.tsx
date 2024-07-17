@@ -5,8 +5,9 @@ import {MantineProvider} from '@mantine/core';
 import {Notifications} from "@mantine/notifications";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import RootPage from "./page/RootPage.tsx";
-import HomePage from "./page/HomePage.tsx";
+import ProfilePage from "./page/ProfilePage.tsx";
 import SettingPage from "./page/SettingPage.tsx";
+import ScriptPage from "./page/ScriptPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -15,11 +16,15 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <HomePage/>
+                element: <ProfilePage/>
             },
             {
                 path: 'settings',
                 element: <SettingPage/>
+            },
+            {
+                path: 'scripts',
+                element: <ScriptPage/>
             }
         ]
     }
