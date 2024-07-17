@@ -1,9 +1,9 @@
 import {Checkbox, Table} from "@mantine/core";
 import React from "react";
-import {useAppDispatch, useAppSelector} from "../store";
-import classes from '../css/TableScrollArea.module.css';
+import {useAppDispatch, useAppSelector} from "../../store";
+import classes from '../../css/TableScrollArea.module.css';
 import cx from 'clsx';
-import dataSlice from "../store/data-slice.ts";
+import dataSlice from "../../store/data-slice.ts";
 
 export default function TableHeader({scrolled}) {
     const dispatch = useAppDispatch()

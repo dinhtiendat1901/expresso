@@ -1,9 +1,9 @@
 import {Divider, Group, Stack} from "@mantine/core";
-import DataTable from "../components/DataTable.tsx";
-import PaginationPage from "../components/PaginationPage.tsx";
-import ItemPerPage from "../components/ItemPerPage.tsx";
-import SearchArea from "../components/SearchArea.tsx";
-import ActionButton from "../components/ActionButton.tsx";
+import DataTable from "../components/profile/DataTable.tsx";
+import PaginationPage from "../components/profile/PaginationPage.tsx";
+import ItemPerPage from "../components/profile/ItemPerPage.tsx";
+import SearchArea from "../components/profile/SearchArea.tsx";
+import ActionButton from "../components/profile/ActionButton.tsx";
 
 
 export default function HomePage() {

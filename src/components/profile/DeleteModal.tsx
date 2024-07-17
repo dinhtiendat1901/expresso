@@ -1,8 +1,8 @@
 import {ActionIcon, Group, Modal, Stack, Text} from "@mantine/core";
 import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";
-import {useAppDispatch} from "../store";
-import pageSlice from "../store/page-slice.ts";
-import {showNotification} from "../utils/utils.ts";
+import {useAppDispatch} from "../../store";
+import pageSlice from "../../store/page-slice.ts";
+import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 
 interface DeleteModalProp {

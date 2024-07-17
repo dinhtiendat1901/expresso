@@ -1,7 +1,7 @@
 import {Group, Pagination} from '@mantine/core';
 import React, {useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../store";
-import pageSlice from "../store/page-slice.ts";
+import {useAppDispatch, useAppSelector} from "../../store";
+import pageSlice from "../../store/page-slice.ts";
 import {invoke} from "@tauri-apps/api";
 
 

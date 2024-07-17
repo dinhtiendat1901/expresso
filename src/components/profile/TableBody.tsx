@@ -1,8 +1,8 @@
 import {Checkbox, Table} from "@mantine/core";
-import {convertDateTime} from "../utils/utils.ts";
+import {convertDateTime} from "../../utils/utils.ts";
 import React, {useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../store";
-import dataSlice, {Profile} from "../store/data-slice.ts";
+import {useAppDispatch, useAppSelector} from "../../store";
+import dataSlice, {Profile} from "../../store/data-slice.ts";
 import {invoke} from "@tauri-apps/api";
 import ProfileAction from "./ProfileAction.tsx";
 

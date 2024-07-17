@@ -1,7 +1,7 @@
 import {Select} from '@mantine/core';
 import React from "react";
-import {useAppDispatch} from "../store";
-import pageSlice from "../store/page-slice.ts";
+import {useAppDispatch} from "../../store";
+import pageSlice from "../../store/page-slice.ts";
 
 
 export default function ItemPerPage() {

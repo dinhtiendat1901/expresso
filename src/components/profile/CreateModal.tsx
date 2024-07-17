@@ -1,8 +1,8 @@
 import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import {useAppDispatch, useAppSelector} from "../store";
-import pageSlice from "../store/page-slice.ts";
-import {showNotification} from "../utils/utils.ts";
+import {useAppDispatch, useAppSelector} from "../../store";
+import pageSlice from "../../store/page-slice.ts";
+import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {fetch, ResponseType} from '@tauri-apps/api/http';
 

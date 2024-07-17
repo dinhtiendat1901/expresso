@@ -4,8 +4,8 @@ import {DateInput} from "@mantine/dates";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {IconAbc, IconCalendar, IconRefresh, IconSearch} from "@tabler/icons-react";
-import {useAppDispatch} from "../store";
-import pageSlice from "../store/page-slice.ts";
+import {useAppDispatch} from "../../store";
+import pageSlice from "../../store/page-slice.ts";
 
 dayjs.extend(customParseFormat);
 

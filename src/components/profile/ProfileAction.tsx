@@ -3,9 +3,9 @@ import {IconPlayerPause, IconPlayerPlay, IconTrash} from "@tabler/icons-react";
 import React, {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import DeleteModal from "./DeleteModal.tsx";
-import dataSlice, {Profile} from "../store/data-slice.ts";
+import dataSlice, {Profile} from "../../store/data-slice.ts";
 import {fetch, ResponseType} from "@tauri-apps/api/http";
-import {useAppDispatch} from "../store";
+import {useAppDispatch} from "../../store";
 
 interface ProfileActionProp {
     profile: Profile
