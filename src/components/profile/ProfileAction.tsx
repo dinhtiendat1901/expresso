@@ -3,7 +3,7 @@ import {IconPlayerPause, IconPlayerPlay, IconTrash} from "@tabler/icons-react";
 import React, {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import DeleteModal from "./DeleteModal.tsx";
-import dataSlice, {Profile} from "../../store/data-slice.ts";
+import profileSlice, {Profile} from "../../store/profile-slice.ts";
 import {fetch, ResponseType} from "@tauri-apps/api/http";
 import {useAppDispatch} from "../../store";
 
@@ -31,7 +31,7 @@ export default function ProfileAction({profile}: ProfileActionProp) {
             },
             responseType: ResponseType.Text
         });
-        dispatch(dataSlice.actions.setRunning({
+        dispatch(profileSlice.actions.setRunning({
             id: profile.id,
             running: true
         }));

@@ -11,16 +11,16 @@ export interface Profile {
 }
 
 
-interface DataState {
+interface ProfileState {
     listProfiles: Profile[]
 }
 
 
-const initialState: DataState = {
+const initialState: ProfileState = {
     listProfiles: []
 }
 
-const dataSlice = createSlice({
+const profileSlice = createSlice({
     name: 'data',
     initialState,
     reducers: {
@@ -41,4 +41,4 @@ const dataSlice = createSlice({
 })
 
 
-export default dataSlice;
+export default profileSlice;

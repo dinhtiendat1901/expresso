@@ -6,7 +6,7 @@ import {invoke} from "@tauri-apps/api";
 import {useAppDispatch} from "../store";
 import ConfigSlice from "../store/config-slice.ts";
 import {io} from "socket.io-client";
-import dataSlice from "../store/data-slice.ts";
+import profileSlice from "../store/profile-slice.ts";
 
 interface Config {
     id: number,
@@ -28,7 +28,7 @@ export default function RootPage() {
     useEffect(() => {
         const socket = io(import.meta.env.VITE_PUPPETEER_SERVER_URL);
         socket.on('close-profile', (profileId) => {
-            dispatch(dataSlice.actions.setRunning({
+            dispatch(profileSlice.actions.setRunning({
                 id: profileId,
                 running: false
             }));

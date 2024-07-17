@@ -3,11 +3,11 @@ import React from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import classes from '../../css/TableScrollArea.module.css';
 import cx from 'clsx';
-import dataSlice from "../../store/data-slice.ts";
+import profileSlice from "../../store/profile-slice.ts";
 
 export default function TableHeader({scrolled}) {
     const dispatch = useAppDispatch()
-    const listProfiles = useAppSelector(state => state.data.listProfiles);
+    const listProfiles = useAppSelector(state => state.profile.listProfiles);
     const allChecked = listProfiles.every((value) => value.checked);
     const indeterminate = listProfiles.some((value) => value.checked) && !allChecked;
     return (
@@ -18,7 +18,7 @@ export default function TableHeader({scrolled}) {
                         checked={allChecked}
                         indeterminate={indeterminate}
                         onChange={() =>
-                            dispatch(dataSlice.actions.selectAll())
+                            dispatch(profileSlice.actions.selectAll())
                         }
                     />
                 </Table.Th>

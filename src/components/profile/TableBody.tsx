@@ -2,7 +2,7 @@ import {Checkbox, Table} from "@mantine/core";
 import {convertDateTime} from "../../utils/utils.ts";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
-import dataSlice, {Profile} from "../../store/data-slice.ts";
+import profileSlice, {Profile} from "../../store/profile-slice.ts";
 import {invoke} from "@tauri-apps/api";
 import ProfileAction from "./ProfileAction.tsx";
 
@@ -10,22 +10,22 @@ import ProfileAction from "./ProfileAction.tsx";
 export default function TableBody() {
     const dispatch = useAppDispatch()
     const pageState = useAppSelector(state => state.page);
-    const data = useAppSelector(state => state.data.listProfiles);
+    const listProfiles = useAppSelector(state => state.profile.listProfiles);
 
 
     useEffect(() => {
         async function fetchData() {
-            let response: Profile[] = await invoke('read_profiles', {
+            let listProfiles: Profile[] = await invoke('read_profiles', {
                 skip: (pageState.currentPage - 1) * pageState.pageLimit,
                 limit: pageState.pageLimit,
                 search: pageState.search,
                 startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
                 endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null
             });
-            response = response.map(profile => {
+            listProfiles = listProfiles.map(profile => {
                 return {...profile, checked: false}
             })
-            dispatch(dataSlice.actions.setData(response))
+            dispatch(profileSlice.actions.setData(listProfiles))
         }
 
         fetchData().then()
@@ -33,7 +33,7 @@ export default function TableBody() {
 
     return (
         <>
-            <Table.Tbody>{data.map((profile) => (
+            <Table.Tbody>{listProfiles.map((profile) => (
                 <Table.Tr
                     key={profile.id}
                     bg={profile.checked ? 'var(--mantine-color-blue-light)' : undefined}>
@@ -42,7 +42,7 @@ export default function TableBody() {
                             aria-label="Select row"
                             checked={profile.checked}
                             key={profile.id}
-                            onChange={(event) => dispatch(dataSlice.actions.changeCheckbox({
+                            onChange={(event) => dispatch(profileSlice.actions.changeCheckbox({
                                 id: profile.id,
                                 checked: event.currentTarget.checked
                             }))}
