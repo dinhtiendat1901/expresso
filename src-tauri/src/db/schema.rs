@@ -16,3 +16,12 @@ diesel::table! {
         path -> Nullable<Text>,
     }
 }
+
+diesel::table! {
+    script (id) {
+        id -> Integer,
+        #[max_length = 100]
+        name -> Varchar,
+        path -> Text,
+    }
+}

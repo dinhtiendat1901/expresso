@@ -23,7 +23,13 @@ fn main() {
             commands::profile_commands::update_profile,
             commands::profile_commands::delete_profiles,
             commands::config_commands::get_config,
-            commands::config_commands::set_config
+            commands::config_commands::set_config,
+            commands::script_commands::read_total_scripts,
+            commands::script_commands::create_script,
+            commands::script_commands::read_script,
+            commands::script_commands::read_scripts,
+            commands::script_commands::update_script,
+            commands::script_commands::delete_scripts
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
