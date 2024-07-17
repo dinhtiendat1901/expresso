@@ -11,11 +11,14 @@ export default function ProfilePage() {
     return <Stack gap='sm'>
         <Group justify='space-between'>
             <SearchArea/>
-            <ActionButton/>
+
         </Group>
         <Divider color='dark' variant='dashed'/>
         <Stack mt={70}>
-            <ItemPerPage/>
+            <Group justify='space-between'>
+                <ItemPerPage/>
+                <ActionButton/>
+            </Group>
             <DataTable/>
             <PaginationPage/>
         </Stack>
