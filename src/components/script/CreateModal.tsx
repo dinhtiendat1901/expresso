@@ -1,19 +1,19 @@
 import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import {useAppDispatch, useAppSelector} from "../../store";
-import pageSlice from "../../store/page-slice.ts";
+import {useAppDispatch} from "../../store";
 import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
-import {fetch, ResponseType} from '@tauri-apps/api/http';
+import {open} from "@tauri-apps/api/dialog";
+import scriptSlice from "../../store/script-slice.ts";
 
 interface FormValue {
     name: string,
-    description: string
+    path: string
 }
 
 const initialValues: FormValue = {
     name: '',
-    description: ''
+    path: ''
 }
 
 interface CreateModalProp {
@@ -23,37 +23,24 @@ interface CreateModalProp {
 
 
 export default function CreateModal({close, opened}: CreateModalProp) {
-    const path = useAppSelector(state => state.config.path)
     const dispatch = useAppDispatch()
     const form = useForm({
         mode: 'uncontrolled',
         initialValues,
         validate: {
             name: isNotEmpty('Enter your name'),
-            description: isNotEmpty('Enter your name')
+            path: isNotEmpty('Select your path')
         },
     });
 
     async function handleCreate(values: FormValue) {
-        const response = await fetch<string>(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/create-profile`, {
-            method: 'POST',
-            timeout: 30,
-            body: {
-                type: 'Json',
-                payload: {
-                    path: path
-                }
-            },
-            responseType: ResponseType.Text
-        });
-        await invoke('create_profile', {
+        await invoke('create_script', {
             name: values.name,
-            description: values.description,
-            path: response.data
+            path: values.path
         });
         form.reset();
         close();
-        dispatch(pageSlice.actions.changeTotal(1))
+        dispatch(scriptSlice.actions.changeTotal(1))
         showNotification('Created')
     }
 
@@ -62,9 +49,22 @@ export default function CreateModal({close, opened}: CreateModalProp) {
         close();
     }
 
+    async function handleSelectPath() {
+        const selectPath = await open({
+            directory: false,
+            filters: [{
+                name: 'Image',
+                extensions: ['js']
+            }]
+        });
+        if (selectPath) {
+            form.setFieldValue('path', (selectPath as string).replace(/\\/g, '/'))
+        }
+    }
+
     return (
 
-        <Modal opened={opened} onClose={onCloseForm}>
+        <Modal opened={opened} onClose={onCloseForm} size='lg'>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
                     <TextInput
@@ -72,16 +72,13 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                         label="Name"
                         placeholder="Your name"
                         key={form.key('name')}
-                        {...form.getInputProps('name')}
-                    />
+                        {...form.getInputProps('name')}/>
 
                     <TextInput
                         withAsterisk
-                        label="Description"
-                        placeholder="Description"
-                        key={form.key('description')}
-                        {...form.getInputProps('description')}
-                    />
+                        label="Path"
+                        key={form.key('path')}
+                        {...form.getInputProps('path')} onClick={handleSelectPath} pointer/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">

@@ -12,7 +12,7 @@ const data = [
 ];
 
 export default function NavbarSimple() {
-    const [active, setActive] = useState('Home');
+    const [active, setActive] = useState('Profiles');
 
     const links = data.map((item) => (
         <Link

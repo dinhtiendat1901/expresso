@@ -10,6 +10,7 @@ export default function TableHeader({scrolled}) {
                 <Table.Th w={50}>ID</Table.Th>
                 <Table.Th w={'20%'}>Name</Table.Th>
                 <Table.Th>Path</Table.Th>
+                <Table.Th w={250}>Action</Table.Th>
             </Table.Tr>
         </Table.Thead>
     )
