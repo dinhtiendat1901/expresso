@@ -25,7 +25,7 @@ export default function ScriptComboBox({setScriptPath}: ScriptComboBoxProp) {
 
 
     return (
-        <Container w={370}>
+        <Container w={370} p={0}>
             <Combobox store={combobox}
                       withinPortal={true}
                       onOptionSubmit={(path, options) => {
@@ -34,7 +34,7 @@ export default function ScriptComboBox({setScriptPath}: ScriptComboBoxProp) {
                           combobox.closeDropdown();
                       }}>
                 <Combobox.Target>
-                    <InputBase component="button" radius='xl'
+                    <InputBase component="button" radius='xl' size='xs'
                                type="button"
                                pointer
                                rightSection={<Combobox.Chevron/>}
