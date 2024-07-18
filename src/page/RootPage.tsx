@@ -3,10 +3,11 @@ import NavbarSimple from "../components/NavbarSimple.tsx";
 import {Outlet} from "react-router-dom";
 import {useEffect} from "react";
 import {invoke} from "@tauri-apps/api";
-import {useAppDispatch} from "../store";
+import {useAppDispatch, useAppSelector} from "../store";
 import ConfigSlice from "../store/config-slice.ts";
 import {io} from "socket.io-client";
 import profileSlice from "../store/profile-slice.ts";
+import scriptSlice, {Script} from "../store/script-slice.ts";
 
 interface Config {
     id: number,
@@ -15,6 +16,7 @@ interface Config {
 
 export default function RootPage() {
     const dispatch = useAppDispatch()
+    const totalScript = useAppSelector(state => state.script.total);
 
     useEffect(() => {
         async function fetchConfig() {
@@ -34,6 +36,21 @@ export default function RootPage() {
             }));
         })
     }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            const listScripts: Script[] = await invoke('read_scripts', {
+                skip: 0,
+                limit: 100
+            });
+            const totalScript: number = await invoke('read_total_scripts')
+            dispatch(scriptSlice.actions.setListScripts(listScripts))
+            dispatch(scriptSlice.actions.setTotal(totalScript))
+        }
+
+        fetchData().then()
+    }, [totalScript]);
+
 
     return <AppShell navbar={{
         width: 350,
