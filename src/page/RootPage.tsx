@@ -1,4 +1,4 @@
-import {AppShell} from "@mantine/core";
+import {AppShell, Box, LoadingOverlay} from "@mantine/core";
 import NavbarSimple from "../components/NavbarSimple.tsx";
 import {Outlet} from "react-router-dom";
 import {useEffect} from "react";
@@ -8,6 +8,7 @@ import ConfigSlice from "../store/config-slice.ts";
 import {io} from "socket.io-client";
 import profileSlice from "../store/profile-slice.ts";
 import scriptSlice, {Script} from "../store/script-slice.ts";
+import pageSlice from "../store/page-slice.ts";
 
 interface Config {
     id: number,
@@ -17,6 +18,7 @@ interface Config {
 export default function RootPage() {
     const dispatch = useAppDispatch()
     const totalScript = useAppSelector(state => state.script.total);
+    const scriptRunning = useAppSelector(state => state.page.scriptRunning);
 
     useEffect(() => {
         async function fetchConfig() {
@@ -34,7 +36,12 @@ export default function RootPage() {
                 id: profileId,
                 running: false
             }));
-        })
+        });
+        socket.on('finish-script', () => {
+            console.log('finish')
+            dispatch(pageSlice.actions.changeScriptRunning())
+        });
+
     }, []);
 
     useEffect(() => {
@@ -56,11 +63,14 @@ export default function RootPage() {
         width: 350,
         breakpoint: 'sm'
     }} padding="md">
-        <AppShell.Navbar p="md">
-            <NavbarSimple/>
-        </AppShell.Navbar>
-        <AppShell.Main>
-            <Outlet/>
-        </AppShell.Main>
+        <Box>
+            <LoadingOverlay visible={scriptRunning} zIndex={1000} overlayProps={{radius: "sm", blur: 0}}/>
+            <AppShell.Navbar p="md">
+                <NavbarSimple/>
+            </AppShell.Navbar>
+            <AppShell.Main>
+                <Outlet/>
+            </AppShell.Main>
+        </Box>
     </AppShell>
 }

@@ -7,6 +7,7 @@ interface PageState {
     startDate: string | null;
     endDate: string | null;
     search: string;
+    scriptRunning: boolean;
 }
 
 const initialState: PageState = {
@@ -15,7 +16,8 @@ const initialState: PageState = {
     total: 0,
     startDate: null,
     endDate: null,
-    search: ''
+    search: '',
+    scriptRunning: false
 }
 
 const pageSlice = createSlice({
@@ -45,6 +47,9 @@ const pageSlice = createSlice({
             state.startDate = action.payload.startDate;
             state.endDate = action.payload.endDate;
             state.search = action.payload.search;
+        },
+        changeScriptRunning(state) {
+            state.scriptRunning = !state.scriptRunning;
         }
     }
 })

@@ -2,15 +2,18 @@ import {ActionIcon, Box, Group, LoadingOverlay} from "@mantine/core";
 import {IconPlayerTrackNext, IconScript} from "@tabler/icons-react";
 import ScriptComboBox from "./ScriptComboBox.tsx";
 import {useState} from "react";
-import {useAppSelector} from "../../store";
+import {useAppDispatch, useAppSelector} from "../../store";
 import {fetch, ResponseType} from "@tauri-apps/api/http";
+import pageSlice from "../../store/page-slice.ts";
 
 export default function RunScript() {
+    const dispatch = useAppDispatch()
     const listProfiles = useAppSelector(state => state.profile.listProfiles);
     const [selectedScriptPath, setSelectedScriptPath] = useState('');
     const profileSelected = listProfiles.some((value) => value.checked)
 
     async function handleClickRunScript() {
+        dispatch(pageSlice.actions.changeScriptRunning())
         const listProfilePaths = listProfiles.filter(profile => profile.checked === true).map(profile => profile.path)
         await fetch<string>(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-job`, {
             method: 'POST',
