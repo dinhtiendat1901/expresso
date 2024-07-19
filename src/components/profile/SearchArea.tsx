@@ -47,20 +47,20 @@ export default function SearchArea() {
                     <Group>
                         <IconAbc/>
                         <TextInput fw={700}
-                                   placeholder="Text" radius='xl' value={search}
+                                   placeholder="Text" value={search}
                                    onChange={(event) => setSearch(event.currentTarget.value)}/>
                     </Group>
                     <Space w={50}/>
                     <Group>
                         <IconCalendar/>
-                        <DateInput w={130} radius='xl' fw={700}
+                        <DateInput w={130} fw={700}
                                    clearable
                                    valueFormat="DD/MM/YYYY"
                                    value={startDate}
                                    onChange={setstartDate}
                                    placeholder="DD/MM/YYYY"
                                    maxDate={new Date()}/>
-                        <DateInput w={130} radius='xl' fw={700}
+                        <DateInput w={130} fw={700}
                                    clearable
                                    valueFormat="DD/MM/YYYY"
                                    value={endDate}

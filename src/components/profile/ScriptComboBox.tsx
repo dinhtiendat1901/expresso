@@ -34,7 +34,7 @@ export default function ScriptComboBox({setScriptPath}: ScriptComboBoxProp) {
                           combobox.closeDropdown();
                       }}>
                 <Combobox.Target>
-                    <InputBase component="button" radius='xl' fw={700}
+                    <InputBase component="button" fw={700}
                                type="button"
                                pointer
                                rightSection={<Combobox.Chevron/>}

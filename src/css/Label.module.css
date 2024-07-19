@@ -1,3 +1,7 @@
 .label {
     font-weight: 900;
 }
+
+.input {
+    border: 2px solid;
+}
