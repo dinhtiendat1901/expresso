@@ -38,7 +38,6 @@ export default function RootPage() {
             }));
         });
         socket.on('finish-script', () => {
-            console.log('finish')
             dispatch(pageSlice.actions.changeScriptRunning())
         });
 

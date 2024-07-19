@@ -5,6 +5,7 @@ import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {open} from "@tauri-apps/api/dialog";
 import scriptSlice from "../../store/script-slice.ts";
+import classes from '../../css/Label.module.css';
 
 interface FormValue {
     name: string,
@@ -72,9 +73,10 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                label="Name"
                                placeholder="Your name"
                                key={form.key('name')}
-                               {...form.getInputProps('name')}/>
+                               {...form.getInputProps('name')}
+                               classNames={{label: classes.label}}/>
 
-                    <TextInput fw={700}
+                    <TextInput fw={700} classNames={{label: classes.label}}
                                withAsterisk
                                label="Path"
                                key={form.key('path')}

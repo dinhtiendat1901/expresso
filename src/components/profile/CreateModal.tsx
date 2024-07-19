@@ -5,6 +5,7 @@ import pageSlice from "../../store/page-slice.ts";
 import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {fetch, ResponseType} from '@tauri-apps/api/http';
+import classes from '../../css/Label.module.css';
 
 interface FormValue {
     name: string,
@@ -73,7 +74,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                placeholder="Your name"
                                key={form.key('name')}
                                {...form.getInputProps('name')}
-                    />
+                               classNames={{label: classes.label}}/>
 
                     <TextInput fw={700}
                                withAsterisk
@@ -81,7 +82,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                placeholder="Description"
                                key={form.key('description')}
                                {...form.getInputProps('description')}
-                    />
+                               classNames={{label: classes.label}}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">
