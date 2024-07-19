@@ -1,4 +1,4 @@
-import {Checkbox, Table} from "@mantine/core";
+import {Checkbox, Table, Text} from "@mantine/core";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import classes from '../../css/TableScrollArea.module.css';
@@ -22,11 +22,11 @@ export default function TableHeader({scrolled}) {
                         }
                     />
                 </Table.Th>
-                <Table.Th w={50}>ID</Table.Th>
-                <Table.Th w={'20%'}>Name</Table.Th>
-                <Table.Th>Description</Table.Th>
-                <Table.Th w={300}>Created Date</Table.Th>
-                <Table.Th w={250}>Action</Table.Th>
+                <Table.Th w={50}><Text fw={900}>ID</Text></Table.Th>
+                <Table.Th w={'20%'}><Text fw={900}>Name</Text></Table.Th>
+                <Table.Th><Text fw={900}>Description</Text></Table.Th>
+                <Table.Th w={300}><Text fw={900}>Created Date</Text></Table.Th>
+                <Table.Th w={250}><Text fw={900}>Action</Text></Table.Th>
             </Table.Tr>
         </Table.Thead>
     )

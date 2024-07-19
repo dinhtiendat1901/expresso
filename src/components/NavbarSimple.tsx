@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {Code, Group} from '@mantine/core';
-import {IconBrandChrome, IconLogout, IconScript, IconSettings, IconSwitchHorizontal,} from '@tabler/icons-react';
+import {Code, Group, Text} from '@mantine/core';
+import {IconBrandChrome, IconScript, IconSettings} from '@tabler/icons-react';
 
 import classes from '../css/NavbarSimple.module.css';
 import {Link} from "react-router-dom";
@@ -25,7 +25,7 @@ export default function NavbarSimple() {
             }}
         >
             <item.icon className={classes.linkIcon} stroke={1.5}/>
-            <span>{item.label}</span>
+            <span><Text fw={900}>{item.label}</Text></span>
         </Link>
     ));
 
@@ -36,18 +36,6 @@ export default function NavbarSimple() {
                     <Code fw={700}>v3.1.2</Code>
                 </Group>
                 {links}
-            </div>
-
-            <div className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                    <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5}/>
-                    <span>Change account</span>
-                </a>
-
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                    <IconLogout className={classes.linkIcon} stroke={1.5}/>
-                    <span>Logout</span>
-                </a>
             </div>
         </nav>
     );

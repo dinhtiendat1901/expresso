@@ -1,4 +1,4 @@
-import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
+import {Button, Group, Modal, Stack, Text, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch} from "../../store";
 import {showNotification} from "../../utils/utils.ts";
@@ -67,22 +67,22 @@ export default function CreateModal({close, opened}: CreateModalProp) {
         <Modal opened={opened} onClose={onCloseForm} size='lg'>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
-                    <TextInput
-                        withAsterisk
-                        label="Name"
-                        placeholder="Your name"
-                        key={form.key('name')}
-                        {...form.getInputProps('name')}/>
+                    <TextInput fw={700}
+                               withAsterisk
+                               label="Name"
+                               placeholder="Your name"
+                               key={form.key('name')}
+                               {...form.getInputProps('name')}/>
 
-                    <TextInput
-                        withAsterisk
-                        label="Path"
-                        key={form.key('path')}
-                        {...form.getInputProps('path')} onClick={handleSelectPath} pointer/>
+                    <TextInput fw={700}
+                               withAsterisk
+                               label="Path"
+                               key={form.key('path')}
+                               {...form.getInputProps('path')} onClick={handleSelectPath} pointer/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">
-                    <Button type="submit">Create</Button>
+                    <Button type="submit"><Text fw={700}>Create</Text></Button>
                 </Group>
             </form>
         </Modal>

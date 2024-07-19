@@ -1,4 +1,4 @@
-import {ActionIcon, Table} from "@mantine/core";
+import {ActionIcon, Table, Text} from "@mantine/core";
 import React, {useState} from "react";
 import {useAppSelector} from "../../store";
 import {IconTrash} from "@tabler/icons-react";
@@ -24,9 +24,9 @@ export default function TableBody() {
         <>
             <Table.Tbody>{listScripts.map((script) => (
                 <Table.Tr key={script.id}>
-                    <Table.Td>{script.id}</Table.Td>
-                    <Table.Td>{script.name}</Table.Td>
-                    <Table.Td>{script.path}</Table.Td>
+                    <Table.Td><Text fw={700}>{script.id}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{script.name}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{script.path}</Text></Table.Td>
                     <Table.Td>
                         <ActionIcon variant='subtle' color='red' pl='5' pr='5' onClick={() => {
                             handleClickDelete(script.id)

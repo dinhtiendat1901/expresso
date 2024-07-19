@@ -9,7 +9,7 @@ export default function ActionButton() {
         <>
             <Button leftSection={<IconCirclePlus size={21}/>} variant="light" color="rgba(0, 3, 166, 1)"
                     onClick={createModalCtl.open}><Text
-                size='19'>Create</Text></Button>
+                size='19' fw={700}>Create</Text></Button>
             <CreateModal close={createModalCtl.close} opened={createModalOpened}/>
         </>);
 }

@@ -13,7 +13,7 @@ export default function ItemPerPage() {
 
     return (
         <>
-            <Select w={70}
+            <Select w={70} fw={700}
                     placeholder="Pick value"
                     data={['10', '20', '30', '40']}
                     defaultValue="10"

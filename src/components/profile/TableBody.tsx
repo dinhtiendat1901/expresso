@@ -1,4 +1,4 @@
-import {Checkbox, Table} from "@mantine/core";
+import {Checkbox, Table, Text} from "@mantine/core";
 import {convertDateTime} from "../../utils/utils.ts";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
@@ -48,10 +48,10 @@ export default function TableBody() {
                             }))}
                         />
                     </Table.Td>
-                    <Table.Td>{profile.id}</Table.Td>
-                    <Table.Td>{profile.name}</Table.Td>
-                    <Table.Td>{profile.description}</Table.Td>
-                    <Table.Td>{convertDateTime(profile.created_date)}</Table.Td>
+                    <Table.Td><Text fw={700}>{profile.id}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{profile.name}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{profile.description}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{convertDateTime(profile.created_date)}</Text></Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>
                     </Table.Td>

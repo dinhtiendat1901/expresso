@@ -1,4 +1,4 @@
-import {Button, Group, Modal, Stack, TextInput} from '@mantine/core';
+import {Button, Group, Modal, Stack, Text, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch, useAppSelector} from "../../store";
 import pageSlice from "../../store/page-slice.ts";
@@ -67,25 +67,25 @@ export default function CreateModal({close, opened}: CreateModalProp) {
         <Modal opened={opened} onClose={onCloseForm}>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
-                    <TextInput
-                        withAsterisk
-                        label="Name"
-                        placeholder="Your name"
-                        key={form.key('name')}
-                        {...form.getInputProps('name')}
+                    <TextInput fw={700}
+                               withAsterisk
+                               label="Name"
+                               placeholder="Your name"
+                               key={form.key('name')}
+                               {...form.getInputProps('name')}
                     />
 
-                    <TextInput
-                        withAsterisk
-                        label="Description"
-                        placeholder="Description"
-                        key={form.key('description')}
-                        {...form.getInputProps('description')}
+                    <TextInput fw={700}
+                               withAsterisk
+                               label="Description"
+                               placeholder="Description"
+                               key={form.key('description')}
+                               {...form.getInputProps('description')}
                     />
                 </Stack>
 
                 <Group justify="flex-end" mt="md">
-                    <Button type="submit">Create</Button>
+                    <Button type="submit"><Text fw={700}>Create</Text></Button>
                 </Group>
             </form>
         </Modal>

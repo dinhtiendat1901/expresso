@@ -27,7 +27,7 @@ export default function DeleteModal({close, opened, profileId}: DeleteModalProp)
         <Modal opened={opened} onClose={close} withCloseButton={false} closeOnEscape={false}
                closeOnClickOutside={false}>
             <Stack align='center'>
-                <Text>Do you want to delete <Text span fw={700} c='red'>Profile {profileId}</Text> ?</Text>
+                <Text fw={700}>Do you want to delete <Text span fw={900} c='red'>Profile {profileId}</Text> ?</Text>
                 <Group justify='center'>
                     <ActionIcon variant='subtle' color='green' radius='xl'
                                 onClick={handleClickConfirm}><IconCircleCheck/></ActionIcon>

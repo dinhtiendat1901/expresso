@@ -18,7 +18,7 @@ export default function ScriptComboBox({setScriptPath}: ScriptComboBoxProp) {
     }, [listScripts]);
 
     const options = listScripts.map((script) => (
-        <Combobox.Option value={script.path} key={script.id}>
+        <Combobox.Option value={script.path} key={script.id} fw={700}>
             {script.name}
         </Combobox.Option>
     ));
@@ -34,7 +34,7 @@ export default function ScriptComboBox({setScriptPath}: ScriptComboBoxProp) {
                           combobox.closeDropdown();
                       }}>
                 <Combobox.Target>
-                    <InputBase component="button" radius='xl' size='xs'
+                    <InputBase component="button" radius='xl' fw={700}
                                type="button"
                                pointer
                                rightSection={<Combobox.Chevron/>}
