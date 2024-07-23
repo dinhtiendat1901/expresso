@@ -2,15 +2,20 @@ use std::fs;
 
 use chrono::NaiveDate;
 use diesel::result::Error;
+use uuid::Uuid;
 
 use crate::db::models::{NewProfile, Profile, UpdateProfile};
-use crate::repositories::profile_repository;
+use crate::repositories::{config_repository, profile_repository};
 
 pub fn get_total_profiles_service(search: Option<String>, start_date: Option<NaiveDate>, end_date: Option<NaiveDate>) -> Result<i32, Error> {
     profile_repository::get_total_profiles(search, start_date, end_date)
 }
 
-pub fn create_profile_service(new_profile: NewProfile) -> Result<Profile, Error> {
+pub fn create_profile_service(name: Option<String>, description: Option<String>) -> Result<Profile, Error> {
+    let main_path = config_repository::get_config()?.path.unwrap_or_else(|| "".to_string());
+    let new_path = format!("{}/{}", main_path, Uuid::new_v4());
+
+    let new_profile = NewProfile { name, description, path: Some(new_path) };
     profile_repository::create_profile(new_profile)
 }
 

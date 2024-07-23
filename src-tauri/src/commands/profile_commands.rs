@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 use tauri::command;
 
-use crate::db::models::{NewProfile, Profile, UpdateProfile};
+use crate::db::models::{Profile, UpdateProfile};
 use crate::services::profile_service;
 
 #[command]
@@ -13,9 +13,8 @@ pub fn read_total_profiles(search: Option<String>, start_date: Option<NaiveDate>
 
 #[command]
 #[allow(dead_code)]
-pub fn create_profile(name: Option<String>, description: Option<String>, path: Option<String>) -> Result<Profile, String> {
-    let new_profile = NewProfile { name, description, path };
-    profile_service::create_profile_service(new_profile)
+pub fn create_profile(name: Option<String>, description: Option<String>) -> Result<Profile, String> {
+    profile_service::create_profile_service(name, description)
         .map_err(|e| e.to_string())
 }
 
