@@ -2,25 +2,11 @@ use std::fs::File;
 use std::io::{self, BufRead, Write};
 use std::path::Path;
 
-pub fn remove_line_and_wrap_with_pattern<P>(filename: P, start_str: &str, replace_pattern: &str) -> io::Result<()>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(&filename)?;
-    let reader = io::BufReader::new(file);
-    let mut lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
-
-    match find_statements_and_apply_braces(&mut lines, start_str, replace_pattern) {
-        Ok(_) => {
-            // Write the modified lines back to the original file
-            write_lines(&filename, &lines)?;
-            Ok(())
-        }
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            Err(io::Error::new(io::ErrorKind::Other, e))
-        }
-    }
+#[derive(Clone, Debug)]
+pub struct ContentBetween {
+    pub start_line_number: usize,
+    pub end_line_number: usize,
+    pub content: Vec<String>,
 }
 
 pub fn replace_words(file_path: &str, old_value: &str, new_value: &str) -> io::Result<()> {
@@ -37,43 +23,117 @@ pub fn replace_words(file_path: &str, old_value: &str, new_value: &str) -> io::R
     Ok(())
 }
 
-pub fn get_content_between_line(file_path: &str, start_line: &str, end_line: &str) -> io::Result<()> {
+pub fn get_content_between_string(
+    file_path: &str,
+    start_string: &str,
+    end_string: &str,
+    contain: bool,
+) -> io::Result<Vec<ContentBetween>> {
+    let path = Path::new(file_path);
+    let file = File::open(&path)?;
+    let reader = io::BufReader::new(file);
+    let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
+    let mut results = Vec::new();
+
+    let mut start_index: Option<usize> = None;
+
+    for (i, line) in lines.iter().enumerate() {
+        let start_condition = if contain {
+            line.contains(start_string)
+        } else {
+            line.trim() == start_string
+        };
+
+        let end_condition = if contain {
+            line.contains(end_string)
+        } else {
+            line.trim() == end_string
+        };
+
+        if start_condition {
+            start_index = Some(i);
+        }
+        if end_condition {
+            if let Some(start) = start_index {
+                if i >= start {
+                    let content = lines[start..=i].to_vec();
+                    results.push(ContentBetween {
+                        start_line_number: start + 1, // Convert to 1-based index
+                        end_line_number: i + 1,       // Convert to 1-based index
+                        content,
+                    });
+                    start_index = None; // Reset start index to find the next pair
+                }
+            }
+        }
+    }
+
+    Ok(results)
+}
+
+pub fn remove_specific_line(file_path: &str, contain_string: &str) -> io::Result<()> {
     let path = Path::new(file_path);
     let file = File::open(&path)?;
     let reader = io::BufReader::new(file);
     let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
 
-    let start_index = lines.iter().position(|line| line.contains(start_line));
-    let end_index = lines.iter().position(|line| line.contains(end_line));
+    let filtered_lines: Vec<String> = lines.into_iter().filter(|line| !line.contains(contain_string)).collect();
 
-    if let (Some(start), Some(end)) = (start_index, end_index) {
-        if start < end {
-            let new_content: Vec<String> = lines[(start + 1)..end].to_vec();
-            write_lines(&path, &new_content)?;
-        } else {
-            eprintln!("The start line is after the end line.");
-            return Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid line order"));
+    write_lines(&path, &filtered_lines)?;
+    Ok(())
+}
+
+pub fn wrap_content(
+    list_content: Vec<ContentBetween>,
+    wrap_pattern: &str,
+) -> Result<Vec<ContentBetween>, &'static str> {
+    if !wrap_pattern.contains("...") {
+        return Err("wrap_pattern must contain '...'");
+    }
+
+    let mut wrapped_contents = Vec::new();
+
+    for content_between in list_content {
+        let content_str = content_between.content.join("\n");
+        let wrapped_str = wrap_pattern.replace("...", &content_str);
+        let wrapped_lines: Vec<String> = wrapped_str.lines().map(|line| line.to_string()).collect();
+
+        wrapped_contents.push(ContentBetween {
+            start_line_number: content_between.start_line_number,
+            end_line_number: content_between.end_line_number,
+            content: wrapped_lines,
+        });
+    }
+
+    Ok(wrapped_contents)
+}
+
+pub fn find_closest_braces_with_content(
+    file_path: &str,
+    contain_string: &str,
+) -> io::Result<Vec<ContentBetween>> {
+    let path = Path::new(file_path);
+    let file = File::open(&path)?;
+    let reader = io::BufReader::new(file);
+    let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
+    let mut results = Vec::new();
+
+    for (i, line) in lines.iter().enumerate() {
+        if line.contains(contain_string) {
+            if let Some((open_brace_line, close_brace_line, content)) = find_braces(&lines, i + 1) {
+                results.push(ContentBetween {
+                    start_line_number: open_brace_line,
+                    end_line_number: close_brace_line,
+                    content,
+                });
+            }
         }
-    } else {
-        eprintln!("Start line or end line not found.");
-        return Err(io::Error::new(io::ErrorKind::NotFound, "Line not found"));
     }
 
-    Ok(())
+    Ok(results)
 }
 
-fn write_lines<P>(filename: P, lines: &[String]) -> io::Result<()>
-where
-    P: AsRef<Path>,
-{
-    let mut file = File::create(filename)?;
-    for line in lines {
-        writeln!(file, "{}", line)?;
-    }
-    Ok(())
-}
-
-fn find_closest_braces_with_content(lines: &[String], line_number: usize) -> Option<(usize, usize, Vec<String>)> {
+fn find_braces(lines: &[String], line_number: usize) -> Option<(usize, usize, Vec<String>)> {
     let mut brace_balance = 0;
 
     if line_number == 0 || line_number > lines.len() {
@@ -114,7 +174,7 @@ fn find_closest_braces_with_content(lines: &[String], line_number: usize) -> Opt
                 brace_balance += 1;
             } else if ch == '}' {
                 if brace_balance == 0 {
-                    return Some((open_brace_line, i + 1, content)); // Return 1-based line number and content
+                    return Some((open_brace_line + 1, i, content)); // Return 1-based line number and content
                 } else {
                     brace_balance -= 1;
                 }
@@ -126,36 +186,70 @@ fn find_closest_braces_with_content(lines: &[String], line_number: usize) -> Opt
     None
 }
 
-fn find_statements_and_apply_braces(lines: &mut Vec<String>, start_str: &str, replace_pattern: &str) -> Result<Vec<(usize, usize, usize, String)>, &'static str> {
-    if !replace_pattern.contains("...") {
-        return Err("replace_pattern must contain '...'");
+pub fn write_file_with_list_content(file_path: &str, list_content: Vec<ContentBetween>) -> io::Result<()> {
+    let path = Path::new(file_path);
+    let file = File::open(&path)?;
+    let reader = io::BufReader::new(file);
+    let mut lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
+
+    // To keep track of line number changes
+    let mut offset: isize = 0;
+
+    for content_between in list_content {
+        let start_index = (content_between.start_line_number as isize - 1 + offset) as usize;
+        let end_index = (content_between.end_line_number as isize + offset) as usize;
+        let original_length = end_index - start_index;
+        let new_length = content_between.content.len();
+
+        // Replace the specified range with new content
+        lines.splice(start_index..end_index, content_between.content.clone());
+
+        // Adjust offset for the next iteration
+        offset += new_length as isize - original_length as isize;
     }
 
-    let mut results = Vec::new();
+    write_lines(&path, &lines)?;
+    Ok(())
+}
 
-    let mut i = 0;
-    while i < lines.len() {
-        if lines[i].trim_start().starts_with(start_str) {
-            if let Some((open_brace_line, close_brace_line, mut content)) = find_closest_braces_with_content(&lines, i + 1) {
-                // Remove the initial statement starting with start_str from the content
-                content.drain(..i + 1 - open_brace_line);
+pub fn filter_list_content(list_content: Vec<ContentBetween>, contain_string: &str) -> Vec<ContentBetween> {
+    list_content.into_iter()
+        .filter(|content_between| !content_between.content.iter().any(|line| line.contains(contain_string)))
+        .collect()
+}
 
-                let content_str = content.join("\n");
-                let replaced_content = replace_pattern.replace("...", &content_str);
-                results.push((i + 1, open_brace_line, close_brace_line, replaced_content.clone())); // 1-based line numbers
+pub fn cut_off_file(file_path: &str, start_line: &str, end_line: &str) -> io::Result<()> {
+    let path = Path::new(file_path);
+    let file = File::open(&path)?;
+    let reader = io::BufReader::new(file);
+    let lines: Vec<String> = reader.lines().collect::<Result<_, _>>()?;
 
-                // Remove the statement and content between braces
-                lines.drain(i..close_brace_line - 1);
+    let start_index = lines.iter().position(|line| line.contains(start_line));
+    let end_index = lines.iter().position(|line| line.contains(end_line));
 
-                // Insert the replaced content at the position of the statement
-                lines.insert(i, replaced_content);
-            } else {
-                i += 1;
-            }
+    if let (Some(start), Some(end)) = (start_index, end_index) {
+        if start < end {
+            let new_content: Vec<String> = lines[(start + 1)..end].to_vec();
+            write_lines(&path, &new_content)?;
         } else {
-            i += 1;
+            eprintln!("The start line is after the end line.");
+            return Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid line order"));
         }
+    } else {
+        eprintln!("Start line or end line not found.");
+        return Err(io::Error::new(io::ErrorKind::NotFound, "Line not found"));
     }
 
-    Ok(results)
+    Ok(())
+}
+
+fn write_lines<P>(filename: P, lines: &[String]) -> io::Result<()>
+where
+    P: AsRef<Path>,
+{
+    let mut file = File::create(filename)?;
+    for line in lines {
+        writeln!(file, "{}", line)?;
+    }
+    Ok(())
 }
