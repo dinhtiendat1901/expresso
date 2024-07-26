@@ -46,6 +46,7 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
         .expect("Error writing file");
 
     handle_script::remove_specific_line(path, ".setTimeout(timeout)").expect("TODO: panic message");
+    handle_script::remove_specific_line(path, ".on('action', () => startWaitingForEvents())").expect("TODO: panic message");
     handle_script::replace_words(path, "puppeteer.Locator", "Promise").expect("TODO: panic message");
     handle_script::replace_words(path, "targetPage.locator", "targetPage.waitForSelector").expect("TODO: panic message");
     handle_script::replace_words(path, ".fill(", ".type(").expect("TODO: panic message");
