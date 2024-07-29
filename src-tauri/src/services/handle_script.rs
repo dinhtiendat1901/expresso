@@ -235,9 +235,6 @@ pub fn cut_off_file(file_path: &str, start_line: &str, end_line: &str) -> io::Re
             eprintln!("The start line is after the end line.");
             return Err(io::Error::new(io::ErrorKind::InvalidInput, "Invalid line order"));
         }
-    } else {
-        eprintln!("Start line or end line not found.");
-        return Err(io::Error::new(io::ErrorKind::NotFound, "Line not found"));
     }
 
     Ok(())

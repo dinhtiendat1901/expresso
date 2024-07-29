@@ -24,7 +24,6 @@ export default function TableBody() {
         <>
             <Table.Tbody>{listScripts.map((script) => (
                 <Table.Tr key={script.id}>
-                    <Table.Td><Text fw={700}>{script.id}</Text></Table.Td>
                     <Table.Td><Text fw={700}>{script.name}</Text></Table.Td>
                     <Table.Td><Text fw={700}>{script.path}</Text></Table.Td>
                     <Table.Td>
