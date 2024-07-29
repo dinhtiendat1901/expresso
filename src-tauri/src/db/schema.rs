@@ -1,12 +1,9 @@
 diesel::table! {
     profile (id) {
-        id -> Integer,
+        id -> Text,
         #[max_length = 100]
-        name -> Nullable<Varchar>,
-        #[max_length = 100]
-        description -> Nullable<Varchar>,
-        created_date -> Nullable<Timestamp>,
-        path -> Nullable<Text>,
+        name -> Varchar,
+        path -> Text,
     }
 }
 
