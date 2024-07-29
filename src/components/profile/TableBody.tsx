@@ -1,5 +1,4 @@
 import {Checkbox, Table, Text} from "@mantine/core";
-import {convertDateTime} from "../../utils/utils.ts";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
@@ -18,9 +17,7 @@ export default function TableBody() {
             let listProfiles: Profile[] = await invoke('read_profiles', {
                 skip: (pageState.currentPage - 1) * pageState.pageLimit,
                 limit: pageState.pageLimit,
-                search: pageState.search,
-                startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
-                endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null
+                search: pageState.search
             });
             listProfiles = listProfiles.map(profile => {
                 return {...profile, checked: false}
@@ -48,10 +45,7 @@ export default function TableBody() {
                             }))}
                         />
                     </Table.Td>
-                    <Table.Td><Text fw={700}>{profile.id}</Text></Table.Td>
                     <Table.Td><Text fw={700}>{profile.name}</Text></Table.Td>
-                    <Table.Td><Text fw={700}>{profile.description}</Text></Table.Td>
-                    <Table.Td><Text fw={700}>{convertDateTime(profile.created_date)}</Text></Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>
                     </Table.Td>

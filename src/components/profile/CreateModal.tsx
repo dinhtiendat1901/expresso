@@ -6,13 +6,11 @@ import {showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 
 interface FormValue {
-    name: string,
-    description: string
+    name: string
 }
 
 const initialValues: FormValue = {
-    name: '',
-    description: ''
+    name: ''
 }
 
 interface CreateModalProp {
@@ -27,15 +25,13 @@ export default function CreateModal({close, opened}: CreateModalProp) {
         mode: 'uncontrolled',
         initialValues,
         validate: {
-            name: isNotEmpty('Enter your name'),
-            description: isNotEmpty('Enter your name')
+            name: isNotEmpty('Enter your name')
         },
     });
 
     async function handleCreate(values: FormValue) {
         await invoke('create_profile', {
-            name: values.name,
-            description: values.description
+            name: values.name
         });
         form.reset();
         close();
@@ -59,13 +55,6 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                placeholder="Your name"
                                key={form.key('name')}
                                {...form.getInputProps('name')}/>
-
-                    <TextInput fw={700}
-                               withAsterisk
-                               label="Description"
-                               placeholder="Description"
-                               key={form.key('description')}
-                               {...form.getInputProps('description')}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">
