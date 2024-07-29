@@ -10,7 +10,7 @@ pub fn get_total_scripts() -> Result<i32, Error> {
     script.count().get_result::<i64>(&mut conn).map(|count| count as i32)
 }
 
-pub fn get_script(script_id: i32) -> Result<Script, Error> {
+pub fn get_script(script_id: String) -> Result<Script, Error> {
     let mut conn = establish_connection();
     script.find(script_id).first(&mut conn)
 }
@@ -29,16 +29,16 @@ pub fn create_script(new_script: NewScript) -> Result<Script, Error> {
     script.order(id.desc()).first(&mut conn)
 }
 
-pub fn update_script(script_id: i32, updated_script: UpdateScript) -> Result<Script, Error> {
+pub fn update_script(script_id: String, updated_script: UpdateScript) -> Result<Script, Error> {
     let mut conn = establish_connection();
-    diesel::update(script.find(script_id))
+    diesel::update(script.find(script_id.clone()))
         .set(&updated_script)
         .execute(&mut conn)?;
 
     script.find(script_id).first(&mut conn)
 }
 
-pub fn delete_scripts(script_ids: Vec<i32>) -> Result<(), Error> {
+pub fn delete_scripts(script_ids: Vec<String>) -> Result<(), Error> {
     let mut conn = establish_connection();
     diesel::delete(script.filter(id.eq_any(script_ids))).execute(&mut conn)?;
     Ok(())

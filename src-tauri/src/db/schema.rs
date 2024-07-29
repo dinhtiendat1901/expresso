@@ -16,7 +16,7 @@ diesel::table! {
 
 diesel::table! {
     script (id) {
-        id -> Integer,
+        id -> Text,
         #[max_length = 100]
         name -> Varchar,
         path -> Text,

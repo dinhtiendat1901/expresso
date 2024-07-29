@@ -39,7 +39,7 @@ pub struct Config {
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
 #[diesel(table_name = script)]
 pub struct Script {
-    pub id: i32,
+    pub id: String,
     pub name: String,
     pub path: String,
 }
