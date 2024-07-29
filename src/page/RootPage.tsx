@@ -9,6 +9,7 @@ import {io} from "socket.io-client";
 import profileSlice from "../store/profile-slice.ts";
 import scriptSlice, {Script} from "../store/script-slice.ts";
 import pageSlice from "../store/page-slice.ts";
+import profileGroupSlice, {ProfileGroup} from "../store/profile-group-slice.ts";
 
 interface Config {
     id: number,
@@ -18,6 +19,7 @@ interface Config {
 export default function RootPage() {
     const dispatch = useAppDispatch()
     const totalScript = useAppSelector(state => state.script.total);
+    const totalProfileGroup = useAppSelector(state => state.profileGroup.total);
     const scriptRunning = useAppSelector(state => state.page.scriptRunning);
 
     useEffect(() => {
@@ -56,6 +58,17 @@ export default function RootPage() {
 
         fetchData().then()
     }, [totalScript]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const listProfileGroup: ProfileGroup[] = await invoke('list_profile_groups');
+            const totalProfileGroup: number = await invoke('read_total_profile_groups')
+            dispatch(profileGroupSlice.actions.setListProfileGroups(listProfileGroup))
+            dispatch(profileGroupSlice.actions.setTotal(totalProfileGroup))
+        }
+
+        fetchData().then()
+    }, [totalProfileGroup]);
 
 
     return <AppShell navbar={{

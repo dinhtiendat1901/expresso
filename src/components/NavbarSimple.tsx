@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Code, Group, Text} from '@mantine/core';
-import {IconBrandChrome, IconScript, IconSettings} from '@tabler/icons-react';
+import {IconBrandChrome, IconDatabase, IconScript, IconSettings} from '@tabler/icons-react';
 
 import classes from '../css/NavbarSimple.module.css';
 import {Link} from "react-router-dom";
@@ -8,7 +8,9 @@ import {Link} from "react-router-dom";
 const data = [
     {link: '/', label: 'Profiles', icon: IconBrandChrome},
     {link: '/scripts', label: 'Scripts', icon: IconScript},
+    {link: '/profile-groups', label: 'Profile Group', icon: IconDatabase},
     {link: '/settings', label: 'Settings', icon: IconSettings},
+
 ];
 
 export default function NavbarSimple() {

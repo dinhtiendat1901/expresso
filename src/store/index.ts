@@ -4,13 +4,15 @@ import {useDispatch, useSelector} from "react-redux";
 import ConfigSlice from "./config-slice.ts";
 import ProfileSlice from "./profile-slice.ts";
 import ScriptSlice from "./script-slice.ts";
+import ProfileGroupSlice from "./profile-group-slice.ts";
 
 const store = configureStore({
     reducer: {
         page: PageSlice.reducer,
         config: ConfigSlice.reducer,
         profile: ProfileSlice.reducer,
-        script: ScriptSlice.reducer
+        script: ScriptSlice.reducer,
+        profileGroup: ProfileGroupSlice.reducer
     }
 })
 

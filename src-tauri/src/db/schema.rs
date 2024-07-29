@@ -1,4 +1,12 @@
 diesel::table! {
+    profile_group (id) {
+        id -> Text,
+        #[max_length = 100]
+        name -> Varchar,
+    }
+}
+
+diesel::table! {
     profile (id) {
         id -> Text,
         #[max_length = 100]

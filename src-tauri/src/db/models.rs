@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::schema::config;
 use super::schema::profile;
+use super::schema::profile_group;
 use super::schema::script;
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
@@ -59,3 +60,25 @@ pub struct UpdateScript {
     pub name: Option<String>,
     pub path: Option<String>,
 }
+
+#[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
+#[diesel(table_name = profile_group)]
+pub struct ProfileGroup {
+    pub id: String,
+    pub name: String,
+}
+
+// Struct used for creating new profile groups
+#[derive(Insertable, Serialize, Deserialize)]
+#[diesel(table_name = profile_group)]
+pub struct NewProfileGroup {
+    pub name: String,
+}
+
+// Struct used for updating profile groups
+#[derive(AsChangeset, Serialize, Deserialize)]
+#[diesel(table_name = profile_group)]
+pub struct UpdateProfileGroup {
+    pub name: Option<String>,
+}
+

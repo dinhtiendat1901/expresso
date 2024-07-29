@@ -9,6 +9,7 @@ import ProfilePage from "./page/ProfilePage.tsx";
 import SettingPage from "./page/SettingPage.tsx";
 import ScriptPage from "./page/ScriptPage.tsx";
 import classes from "./css/Label.module.css"
+import ProfileGroupPage from "./page/ProfileGroupPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: 'scripts',
                 element: <ScriptPage/>
+            },
+            {
+                path: 'profile-groups',
+                element: <ProfileGroupPage/>
             }
         ]
     }

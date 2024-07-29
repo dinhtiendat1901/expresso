@@ -5,8 +5,8 @@ use std::process::{Command, Stdio};
 
 mod commands;
 mod db;
-mod services;
 mod repositories;
+mod services;
 
 fn main() {
     Command::new("./binaries/puppeteer-server-win.exe")
@@ -29,9 +29,14 @@ fn main() {
             commands::script_commands::read_script,
             commands::script_commands::read_scripts,
             commands::script_commands::update_script,
-            commands::script_commands::delete_scripts
+            commands::script_commands::delete_scripts,
+            commands::profile_group_commands::create_profile_group,
+            commands::profile_group_commands::read_profile_group,
+            commands::profile_group_commands::list_profile_groups,
+            commands::profile_group_commands::read_total_profile_groups,
+            commands::profile_group_commands::update_profile_group,
+            commands::profile_group_commands::delete_profile_groups
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
