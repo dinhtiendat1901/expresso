@@ -1,7 +1,7 @@
 import {Button, Group, Modal, Stack, Text, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch} from "../../store";
-import {showNotification} from "../../utils/utils.ts";
+import {handleKeyPress, showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {open} from "@tauri-apps/api/dialog";
 import scriptSlice from "../../store/script-slice.ts";
@@ -72,7 +72,8 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                label="Name"
                                placeholder="Your name"
                                key={form.key('name')}
-                               {...form.getInputProps('name')}/>
+                               {...form.getInputProps('name')}
+                               onKeyPress={handleKeyPress}/>
 
                     <TextInput fw={700}
                                withAsterisk

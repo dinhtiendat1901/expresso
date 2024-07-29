@@ -5,6 +5,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {IconAbc, IconRefresh, IconSearch} from "@tabler/icons-react";
 import {useAppDispatch} from "../../store";
 import pageSlice from "../../store/page-slice.ts";
+import {handleKeyPress} from "../../utils/utils.ts";
 
 dayjs.extend(customParseFormat);
 
@@ -33,7 +34,8 @@ export default function SearchArea() {
                         <IconAbc/>
                         <TextInput fw={700}
                                    placeholder="Name" value={search}
-                                   onChange={(event) => setSearch(event.currentTarget.value)}/>
+                                   onChange={(event) => setSearch(event.currentTarget.value)}
+                                   onKeyPress={handleKeyPress}/>
                     </Group>
                 </Group>
                 <Group justify='flex-end'>
