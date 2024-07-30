@@ -12,6 +12,7 @@ pub struct Profile {
     pub id: String,
     pub name: String,
     pub path: String,
+    pub group_id: String,
 }
 
 // Struct used for creating new profiles
@@ -20,6 +21,7 @@ pub struct Profile {
 pub struct NewProfile {
     pub name: String,
     pub path: String,
+    pub group_id: String,
 }
 
 // Struct used for updating profiles
@@ -28,6 +30,15 @@ pub struct NewProfile {
 pub struct UpdateProfile {
     pub name: Option<String>,
     pub path: Option<String>,
+    pub group_id: Option<String>,
+}
+
+#[derive(Queryable, Serialize, Deserialize, Debug)]
+pub struct ProfileWithGroup {
+    pub id: String,
+    pub name: String,
+    pub path: String,
+    pub profile_group: ProfileGroup,
 }
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
@@ -81,4 +92,3 @@ pub struct NewProfileGroup {
 pub struct UpdateProfileGroup {
     pub name: Option<String>,
 }
-

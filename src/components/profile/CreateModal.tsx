@@ -4,6 +4,8 @@ import {useAppDispatch} from "../../store";
 import pageSlice from "../../store/page-slice.ts";
 import {handleKeyPress, showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
+import {useState} from "react";
+import ProfileGroupComboBox from "./ProfileGroupComboBox.tsx";
 
 interface FormValue {
     name: string
@@ -21,6 +23,7 @@ interface CreateModalProp {
 
 export default function CreateModal({close, opened}: CreateModalProp) {
     const dispatch = useAppDispatch()
+    const [selectedProfileGroup, setSelectedProfileGroup] = useState('')
     const form = useForm({
         mode: 'uncontrolled',
         initialValues,
@@ -31,7 +34,8 @@ export default function CreateModal({close, opened}: CreateModalProp) {
 
     async function handleCreate(values: FormValue) {
         await invoke('create_profile', {
-            name: values.name
+            name: values.name,
+            groupId: selectedProfileGroup
         });
         form.reset();
         close();
@@ -56,6 +60,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                key={form.key('name')}
                                {...form.getInputProps('name')}
                                onKeyPress={handleKeyPress}/>
+                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">

@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {ProfileGroup} from "./profile-group-slice.ts";
 
 export interface Profile {
     id: number;
@@ -8,6 +9,7 @@ export interface Profile {
     path: string;
     running: boolean;
     checked: boolean;
+    profile_group: ProfileGroup;
 }
 
 

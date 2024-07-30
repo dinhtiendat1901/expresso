@@ -46,6 +46,7 @@ export default function TableBody() {
                         />
                     </Table.Td>
                     <Table.Td><Text fw={700}>{profile.name}</Text></Table.Td>
+                    <Table.Td><Text fw={700}>{profile.profile_group.name}</Text></Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>
                     </Table.Td>

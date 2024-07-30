@@ -1,30 +1,43 @@
 use diesel::result::Error;
 use uuid::Uuid;
 
-use crate::db::models::{NewProfile, Profile, UpdateProfile};
+use crate::db::models::{NewProfile, Profile, ProfileWithGroup, UpdateProfile};
 use crate::repositories::{config_repository, profile_repository};
 
 pub fn get_total_profiles_service(search: Option<String>) -> Result<i32, Error> {
     profile_repository::get_total_profiles(search)
 }
 
-pub fn create_profile_service(name: String) -> Result<Profile, Error> {
-    let main_path = config_repository::get_config()?.path.unwrap_or_else(|| "".to_string());
+pub fn create_profile_service(name: String, group_id: String) -> Result<Profile, Error> {
+    let main_path = config_repository::get_config()?
+        .path
+        .unwrap_or_else(|| "".to_string());
     let new_path = format!("{}/{}", main_path, Uuid::new_v4());
 
-    let new_profile = NewProfile { name, path: new_path };
+    let new_profile = NewProfile {
+        name,
+        path: new_path,
+        group_id,
+    };
     profile_repository::create_profile(new_profile)
 }
 
-pub fn get_profile_service(profile_id: String) -> Result<Profile, Error> {
+pub fn get_profile_service(profile_id: String) -> Result<ProfileWithGroup, Error> {
     profile_repository::get_profile(profile_id)
 }
 
-pub fn list_profiles_service(skip: i64, limit: i64, search: Option<String>) -> Result<Vec<Profile>, Error> {
+pub fn list_profiles_service(
+    skip: i64,
+    limit: i64,
+    search: Option<String>,
+) -> Result<Vec<ProfileWithGroup>, Error> {
     profile_repository::list_profiles(skip, limit, search)
 }
 
-pub fn update_profile_service(profile_id: String, updated_profile: UpdateProfile) -> Result<Profile, Error> {
+pub fn update_profile_service(
+    profile_id: String,
+    updated_profile: UpdateProfile,
+) -> Result<Profile, Error> {
     profile_repository::update_profile(profile_id, updated_profile)
 }
 
