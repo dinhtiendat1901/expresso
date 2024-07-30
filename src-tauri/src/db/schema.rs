@@ -13,6 +13,8 @@ diesel::table! {
         id -> Text,
         #[max_length = 100]
         name -> Varchar,
+        #[max_length = 20]
+        color -> Varchar,
     }
 }
 

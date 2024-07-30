@@ -77,6 +77,7 @@ pub struct UpdateScript {
 pub struct ProfileGroup {
     pub id: String,
     pub name: String,
+    pub color: String,
 }
 
 // Struct used for creating new profile groups
@@ -84,6 +85,7 @@ pub struct ProfileGroup {
 #[diesel(table_name = profile_group)]
 pub struct NewProfileGroup {
     pub name: String,
+    pub color: String,
 }
 
 // Struct used for updating profile groups
@@ -91,4 +93,5 @@ pub struct NewProfileGroup {
 #[diesel(table_name = profile_group)]
 pub struct UpdateProfileGroup {
     pub name: Option<String>,
+    pub color: Option<String>,
 }

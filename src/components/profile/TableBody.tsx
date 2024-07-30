@@ -1,4 +1,4 @@
-import {Checkbox, Table, Text} from "@mantine/core";
+import {Badge, Checkbox, Table, Text} from "@mantine/core";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
@@ -46,7 +46,7 @@ export default function TableBody() {
                         />
                     </Table.Td>
                     <Table.Td><Text fw={700}>{profile.name}</Text></Table.Td>
-                    <Table.Td><Text fw={700}>{profile.profile_group.name}</Text></Table.Td>
+                    <Table.Td><Badge color={profile.profile_group.color}>{profile.profile_group.name}</Badge></Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>
                     </Table.Td>

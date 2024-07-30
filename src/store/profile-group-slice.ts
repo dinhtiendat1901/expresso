@@ -3,6 +3,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 export interface ProfileGroup {
     id: string;
     name: string;
+    color: string;
 }
 
 

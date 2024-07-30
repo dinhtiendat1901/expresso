@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Combobox, InputBase, useCombobox} from '@mantine/core';
+import {Badge, Combobox, InputBase, useCombobox} from '@mantine/core';
 import {useAppSelector} from "../../store";
 
 interface ScriptComboBoxProp {
@@ -11,15 +11,15 @@ export default function ProfileGroupComboBox({setProfileGroup}: ScriptComboBoxPr
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
-    const [value, setValue] = useState<string | null>(null);
+    const [value, setValue] = useState(null);
     useEffect(() => {
-        setValue(listProfileGroups[0]?.name)
+        setValue(<Badge color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
         setProfileGroup(listProfileGroups[0]?.id)
     }, [listProfileGroups]);
 
     const options = listProfileGroups.map((profileGroup) => (
         <Combobox.Option value={profileGroup.id} key={profileGroup.id} fw={700}>
-            {profileGroup.name}
+            <Badge color={profileGroup.color}>{profileGroup.name}</Badge>
         </Combobox.Option>
     ));
 

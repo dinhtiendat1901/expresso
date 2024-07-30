@@ -1,4 +1,4 @@
-import {ActionIcon, Table, Text} from "@mantine/core";
+import {ActionIcon, Badge, Table} from "@mantine/core";
 import React, {useState} from "react";
 import {useAppSelector} from "../../store";
 import {IconTrash} from "@tabler/icons-react";
@@ -24,12 +24,13 @@ export default function TableBody() {
         <>
             <Table.Tbody>{listProfileGroups.map((profileGroup) => (
                 <Table.Tr key={profileGroup.id}>
-                    <Table.Td><Text fw={700}>{profileGroup.name}</Text></Table.Td>
+                    <Table.Td><Badge color={profileGroup.color}>{profileGroup.name}</Badge></Table.Td>
                     <Table.Td>
-                        <ActionIcon variant='subtle' color='red' pl='5' pr='5' onClick={() => {
-                            handleClickDelete(profileGroup.id)
-                        }}><IconTrash
-                            size={21}/></ActionIcon>
+                        {profileGroup.id !== '4a988770-cbd9-4b18-99ed-b94343b206a5' &&
+                            <ActionIcon variant='subtle' color='red' pl='5' pr='5' onClick={() => {
+                                handleClickDelete(profileGroup.id)
+                            }}><IconTrash
+                                size={21}/></ActionIcon>}
                     </Table.Td>
                 </Table.Tr>))
             }</Table.Tbody>

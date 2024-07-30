@@ -15,13 +15,17 @@ pub fn get_total_profile_groups_service() -> Result<i32, Error> {
     profile_group_repository::get_total_profile_groups()
 }
 
-pub fn create_profile_group_service(name: String) -> Result<ProfileGroup, Error> {
-    let new_profile_group = NewProfileGroup { name };
+pub fn create_profile_group_service(name: String, color: String) -> Result<ProfileGroup, Error> {
+    let new_profile_group = NewProfileGroup { name, color };
     profile_group_repository::create_profile_group(new_profile_group)
 }
 
-pub fn update_profile_group_service(profile_group_id: String, name: Option<String>) -> Result<ProfileGroup, Error> {
-    let updated_profile_group = UpdateProfileGroup { name };
+pub fn update_profile_group_service(
+    profile_group_id: String,
+    name: Option<String>,
+    color: Option<String>,
+) -> Result<ProfileGroup, Error> {
+    let updated_profile_group = UpdateProfileGroup { name, color };
     profile_group_repository::update_profile_group(profile_group_id, updated_profile_group)
 }
 
