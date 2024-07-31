@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Badge, Combobox, InputBase, useCombobox} from '@mantine/core';
 import {useAppSelector} from "../../store";
+import classes from '../../css/BagdeLabel.module.css'
 
 interface ScriptComboBoxProp {
     setProfileGroup: (id: string) => void;
@@ -13,20 +14,23 @@ export default function ProfileGroupComboBox({setProfileGroup}: ScriptComboBoxPr
     });
     const [value, setValue] = useState(null);
     useEffect(() => {
-        setValue(<Badge color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
+        setValue(<Badge classNames={{
+            label: classes.label
+        }} color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
         setProfileGroup(listProfileGroups[0]?.id)
     }, [listProfileGroups]);
 
     const options = listProfileGroups.map((profileGroup) => (
         <Combobox.Option value={profileGroup.id} key={profileGroup.id} fw={700}>
-            <Badge color={profileGroup.color}>{profileGroup.name}</Badge>
+            <Badge classNames={{
+                label: classes.label
+            }} color={profileGroup.color}>{profileGroup.name}</Badge>
         </Combobox.Option>
     ));
 
 
     return (
         <>
-
             <Combobox store={combobox}
                       withinPortal={true}
                       onOptionSubmit={(id, options) => {
@@ -35,14 +39,16 @@ export default function ProfileGroupComboBox({setProfileGroup}: ScriptComboBoxPr
                           combobox.closeDropdown();
                       }}>
                 <Combobox.Target>
-                    <InputBase
-                        label='Profile Group'
-                        component="button" fw={700}
-                        type="button"
-                        pointer
-                        rightSection={<Combobox.Chevron/>}
-                        onClick={() => combobox.toggleDropdown()}
-                        rightSectionPointerEvents="none">
+                    <InputBase classNames={{
+                        input: classes.input
+                    }}
+                               label='Profile Group'
+                               component="button" fw={700}
+                               type="button"
+                               pointer
+                               rightSection={<Combobox.Chevron/>}
+                               onClick={() => combobox.toggleDropdown()}
+                               rightSectionPointerEvents="none">
                         {value}
                     </InputBase>
                 </Combobox.Target>

@@ -5,6 +5,7 @@ import {IconTrash} from "@tabler/icons-react";
 
 import {useDisclosure} from "@mantine/hooks";
 import DeleteModal from "./DeleteModal.tsx";
+import classes from '../../css/BagdeLabel.module.css'
 
 
 export default function TableBody() {
@@ -24,7 +25,9 @@ export default function TableBody() {
         <>
             <Table.Tbody>{listProfileGroups.map((profileGroup) => (
                 <Table.Tr key={profileGroup.id}>
-                    <Table.Td><Badge color={profileGroup.color}>{profileGroup.name}</Badge></Table.Td>
+                    <Table.Td><Badge classNames={{
+                        label: classes.label
+                    }} color={profileGroup.color}>{profileGroup.name}</Badge></Table.Td>
                     <Table.Td>
                         {profileGroup.id !== '4a988770-cbd9-4b18-99ed-b94343b206a5' &&
                             <ActionIcon variant='subtle' color='red' pl='5' pr='5' onClick={() => {

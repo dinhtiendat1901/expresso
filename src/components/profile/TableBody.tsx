@@ -4,6 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../store";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
 import {invoke} from "@tauri-apps/api";
 import ProfileAction from "./ProfileAction.tsx";
+import classes from '../../css/BagdeLabel.module.css'
 
 
 export default function TableBody() {
@@ -46,7 +47,10 @@ export default function TableBody() {
                         />
                     </Table.Td>
                     <Table.Td><Text fw={700}>{profile.name}</Text></Table.Td>
-                    <Table.Td><Badge color={profile.profile_group.color}>{profile.profile_group.name}</Badge></Table.Td>
+                    <Table.Td><Badge classNames={{
+                        label: classes.label
+                    }}
+                                     color={profile.profile_group.color}>{profile.profile_group.name}</Badge></Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>
                     </Table.Td>
