@@ -22,6 +22,7 @@ fn main() {
             commands::profile_commands::read_profiles,
             commands::profile_commands::update_profile,
             commands::profile_commands::delete_profiles,
+            commands::profile_commands::batch_import_profile,
             commands::config_commands::get_config,
             commands::config_commands::set_config,
             commands::script_commands::read_total_scripts,

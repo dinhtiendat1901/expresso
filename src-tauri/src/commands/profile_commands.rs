@@ -46,3 +46,10 @@ pub fn delete_profiles(profile_ids: Vec<String>) -> Result<String, String> {
         .map(|_| "Profiles deleted successfully".to_string())
         .map_err(|e| e.to_string())
 }
+
+#[command]
+#[allow(dead_code)]
+pub fn batch_import_profile(group_id: String, count: usize) -> Result<usize, String> {
+    profile_service::batch_import_profile_service(group_id, count)
+        .map_err(|e| e.to_string())
+}

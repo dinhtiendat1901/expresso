@@ -109,3 +109,21 @@ pub fn delete_profiles(profile_ids: Vec<String>) -> Result<Vec<String>, Error> {
 
     Ok(profiles_to_delete)
 }
+
+pub fn batch_import_profile(new_profiles: Vec<NewProfile>) -> Result<usize, Error> {
+    let conn = &mut establish_connection();
+    conn.transaction::<_, Error, _>(|conn| {
+        // Define the batch size
+        let batch_size = 1000;
+        let mut total_inserted = 0;
+
+        // Insert in batches
+        for chunk in new_profiles.chunks(batch_size) {
+            total_inserted += diesel::insert_into(profile::table)
+                .values(chunk)
+                .execute(conn)?;
+        }
+
+        Ok(total_inserted)
+    })
+}

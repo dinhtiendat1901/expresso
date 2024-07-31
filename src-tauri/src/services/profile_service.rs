@@ -1,8 +1,10 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use diesel::result::Error;
 use uuid::Uuid;
 
 use crate::db::models::{NewProfile, Profile, ProfileWithGroup, UpdateProfile};
-use crate::repositories::{config_repository, profile_repository};
+use crate::repositories::{config_repository, profile_group_repository, profile_repository};
 
 pub fn get_total_profiles_service(search: Option<String>) -> Result<i32, Error> {
     profile_repository::get_total_profiles(search)
@@ -51,4 +53,37 @@ pub fn delete_profiles_service(profile_ids: Vec<String>) -> Result<(), Error> {
     }
 
     Ok(())
+}
+
+pub fn batch_import_profile_service(group_id: String, count: usize) -> Result<usize, Error> {
+    // Get the profile group name
+    let profile_group = profile_group_repository::get_profile_group(group_id.clone())?;
+    let profile_group_name = profile_group.name;
+
+    // Generate the list of NewProfile
+    let mut new_profiles = Vec::with_capacity(count);
+    let main_path = config_repository::get_config()?
+        .path
+        .unwrap_or_else(|| "".to_string());
+
+    let current_time = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards")
+        .as_millis();
+
+    for i in 0..count {
+        // Combine current milliseconds with counter to create a unique timestamp
+        let unique_time = current_time + i as u128;
+        let name = format!("{}-{}", profile_group_name, unique_time);
+        let new_path = format!("{}/{}", main_path, Uuid::new_v4());
+
+        new_profiles.push(NewProfile {
+            name,
+            path: new_path,
+            group_id: group_id.clone(),
+        });
+    }
+
+    // Pass the list to batch_import_profile
+    profile_repository::batch_import_profile(new_profiles)
 }
