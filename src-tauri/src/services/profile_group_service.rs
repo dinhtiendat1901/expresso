@@ -2,6 +2,7 @@ use diesel::result::Error;
 
 use crate::db::models::{NewProfileGroup, ProfileGroup, UpdateProfileGroup};
 use crate::repositories::profile_group_repository;
+use crate::services::profile_service;
 
 pub fn get_profile_group_service(profile_group_id: String) -> Result<ProfileGroup, Error> {
     profile_group_repository::get_profile_group(profile_group_id)
@@ -30,5 +31,9 @@ pub fn update_profile_group_service(
 }
 
 pub fn delete_profile_groups_service(profile_group_ids: Vec<String>) -> Result<(), Error> {
-    profile_group_repository::delete_profile_groups(profile_group_ids)
+    // Delete profile groups and get related profile IDs
+    let related_profile_ids = profile_group_repository::delete_profile_groups(profile_group_ids)?;
+
+    // Delete related profiles
+    profile_service::delete_profiles_service(related_profile_ids)
 }

@@ -47,8 +47,11 @@ pub fn delete_profiles_service(profile_ids: Vec<String>) -> Result<(), Error> {
     let paths = profile_repository::delete_profiles(profile_ids)?;
 
     for path in paths {
-        if let Err(e) = std::fs::remove_dir_all(&path) {
-            eprintln!("Failed to remove directory {}: {}", path, e);
+        // Check if the path exists before attempting to remove it
+        if std::path::Path::new(&path).exists() {
+            if let Err(e) = std::fs::remove_dir_all(&path) {
+                eprintln!("Failed to remove directory {}: {}", path, e);
+            }
         }
     }
 

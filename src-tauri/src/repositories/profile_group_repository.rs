@@ -3,6 +3,7 @@ use diesel::result::Error;
 
 use crate::db::connection::establish_connection;
 use crate::db::models::{NewProfileGroup, ProfileGroup, UpdateProfileGroup};
+use crate::db::schema::profile;
 use crate::db::schema::profile_group::dsl::*;
 
 pub fn get_profile_group(profile_group_id: String) -> Result<ProfileGroup, Error> {
@@ -38,8 +39,18 @@ pub fn update_profile_group(profile_group_id: String, updated_profile_group: Upd
     profile_group.find(profile_group_id).first(&mut conn)
 }
 
-pub fn delete_profile_groups(profile_group_ids: Vec<String>) -> Result<(), Error> {
+pub fn delete_profile_groups(profile_group_ids: Vec<String>) -> Result<Vec<String>, Error> {
     let mut conn = establish_connection();
-    diesel::delete(profile_group.filter(id.eq_any(profile_group_ids))).execute(&mut conn)?;
-    Ok(())
+
+    // Get related profile IDs
+    let related_profile_ids: Vec<String> = profile::table
+        .filter(profile::group_id.eq_any(&profile_group_ids))
+        .select(profile::id)
+        .load(&mut conn)?;
+
+    // Delete profile groups
+    diesel::delete(profile_group.filter(id.eq_any(&profile_group_ids)))
+        .execute(&mut conn)?;
+
+    Ok(related_profile_ids)
 }
