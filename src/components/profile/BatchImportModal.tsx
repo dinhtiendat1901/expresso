@@ -63,7 +63,7 @@ export default function BatchImportModal({close, opened}: CreateModalProp) {
                                  label="Number of Profile"
                                  key={form.key('count')}
                                  {...form.getInputProps('count')}/>
-                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup}/>
+                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup} label='Group' canClear={false}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">

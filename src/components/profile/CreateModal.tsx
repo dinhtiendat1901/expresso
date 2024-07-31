@@ -60,7 +60,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                key={form.key('name')}
                                {...form.getInputProps('name')}
                                onKeyPress={handleKeyPress}/>
-                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup}/>
+                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup} label='Group' canClear={false}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">
