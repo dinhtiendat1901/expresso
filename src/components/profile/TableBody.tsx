@@ -18,7 +18,8 @@ export default function TableBody() {
             let listProfiles: Profile[] = await invoke('read_profiles', {
                 skip: (pageState.currentPage - 1) * pageState.pageLimit,
                 limit: pageState.pageLimit,
-                search: pageState.search
+                search: pageState.search,
+                groupId: pageState.profileGroupId
             });
             listProfiles = listProfiles.map(profile => {
                 return {...profile, checked: false}

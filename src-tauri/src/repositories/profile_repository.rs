@@ -5,12 +5,16 @@ use crate::db::connection::establish_connection;
 use crate::db::models::{NewProfile, Profile, ProfileGroup, ProfileWithGroup, UpdateProfile};
 use crate::db::schema::{profile, profile_group};
 
-pub fn get_total_profiles(search: Option<String>) -> Result<i32, Error> {
+pub fn get_total_profiles(search: Option<String>, group_id: Option<String>) -> Result<i32, Error> {
     let mut conn = establish_connection();
     let mut query = profile::table.into_boxed();
 
     if let Some(search) = search {
         query = query.filter(profile::name.like(format!("%{}%", search)));
+    }
+
+    if let Some(group_id) = group_id {
+        query = query.filter(profile::group_id.eq(group_id));
     }
 
     query
@@ -43,6 +47,7 @@ pub fn list_profiles(
     skip: i64,
     limit: i64,
     search: Option<String>,
+    group_id: Option<String>,
 ) -> Result<Vec<ProfileWithGroup>, Error> {
     let mut conn = establish_connection();
     let mut query = profile::table
@@ -57,6 +62,10 @@ pub fn list_profiles(
 
     if let Some(search) = search {
         query = query.filter(profile::name.like(format!("%{}%", search)));
+    }
+
+    if let Some(group_id) = group_id {
+        query = query.filter(profile::group_id.eq(group_id));
     }
 
     query

@@ -5,6 +5,7 @@ interface PageState {
     pageLimit: number;
     total: number;
     search: string;
+    profileGroupId: string;
     scriptRunning: boolean;
 }
 
@@ -13,6 +14,7 @@ const initialState: PageState = {
     pageLimit: 10,
     total: 0,
     search: '',
+    profileGroupId: undefined,
     scriptRunning: false
 }
 
@@ -35,10 +37,12 @@ const pageSlice = createSlice({
         },
         changeCondition(state, action: PayloadAction<{
             search: string;
+            profileGroupId: string;
         }>) {
 
             state.currentPage = 1;
             state.search = action.payload.search;
+            state.profileGroupId = action.payload.profileGroupId;
         },
         changeScriptRunning(state) {
             state.scriptRunning = !state.scriptRunning;

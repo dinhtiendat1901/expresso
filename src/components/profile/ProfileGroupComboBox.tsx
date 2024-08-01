@@ -29,7 +29,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
             setValue(<Badge classNames={{
                 label: classes.label
             }} color='dark'>All</Badge>)
-            setProfileGroup('')
+            setProfileGroup(undefined)
         }
     }, [listProfileGroups]);
     useImperativeHandle(ref, () => {
@@ -51,7 +51,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
     ));
 
     if (canClear) {
-        options.unshift(<Combobox.Option value='' key='all' fw={700}>
+        options.unshift(<Combobox.Option value={undefined} key='all' fw={700}>
             <Badge classNames={{
                 label: classes.label
             }} color='dark'>All</Badge>

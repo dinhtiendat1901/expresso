@@ -13,21 +13,24 @@ dayjs.extend(customParseFormat);
 export default function SearchArea() {
     const dispatch = useAppDispatch();
     const [search, setSearch] = useState('');
-    const [selectedProfileGroup, setSelectedProfileGroup] = useState('');
+    const [selectedProfileGroup, setSelectedProfileGroup] = useState(undefined);
     const combobox = useRef();
 
     function handleClickSearch() {
         dispatch(pageSlice.actions.changeCondition({
-            search
+            search,
+            profileGroupId: selectedProfileGroup
         }))
     }
 
     function handleClickReset() {
         setSearch('');
+        setSelectedProfileGroup(undefined);
         // @ts-ignore
         combobox.current.clear();
         dispatch(pageSlice.actions.changeCondition({
-            search: ''
+            search: '',
+            profileGroupId: undefined
         }))
     }
 

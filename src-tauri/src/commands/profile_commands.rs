@@ -5,8 +5,8 @@ use crate::services::profile_service;
 
 #[command]
 #[allow(dead_code)]
-pub fn read_total_profiles(search: Option<String>) -> Result<i32, String> {
-    profile_service::get_total_profiles_service(search)
+pub fn read_total_profiles(search: Option<String>, group_id: Option<String>) -> Result<i32, String> {
+    profile_service::get_total_profiles_service(search, group_id)
         .map_err(|e| e.to_string())
 }
 
@@ -26,8 +26,8 @@ pub fn read_profile(profile_id: String) -> Result<ProfileWithGroup, String> {
 
 #[command]
 #[allow(dead_code)]
-pub fn read_profiles(skip: i64, limit: i64, search: Option<String>) -> Result<Vec<ProfileWithGroup>, String> {
-    profile_service::list_profiles_service(skip, limit, search)
+pub fn read_profiles(skip: i64, limit: i64, search: Option<String>, group_id: Option<String>) -> Result<Vec<ProfileWithGroup>, String> {
+    profile_service::list_profiles_service(skip, limit, search, group_id)
         .map_err(|e| e.to_string())
 }
 
