@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use super::schema::config;
 use super::schema::profile;
 use super::schema::profile_group;
+use super::schema::run_status;
 use super::schema::script;
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
@@ -94,4 +95,26 @@ pub struct NewProfileGroup {
 pub struct UpdateProfileGroup {
     pub name: Option<String>,
     pub color: Option<String>,
+}
+
+#[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
+#[diesel(table_name = run_status)]
+pub struct RunStatus {
+    pub profile_id: String,
+    pub script_id: String,
+    pub status: i32,
+}
+
+#[derive(Insertable, Serialize, Deserialize)]
+#[diesel(table_name = run_status)]
+pub struct NewRunStatus {
+    pub profile_id: String,
+    pub script_id: String,
+    pub status: i32,
+}
+
+#[derive(AsChangeset, Serialize, Deserialize)]
+#[diesel(table_name = run_status)]
+pub struct UpdateRunStatus {
+    pub status: i32,
 }

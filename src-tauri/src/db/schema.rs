@@ -34,6 +34,17 @@ diesel::table! {
     }
 }
 
-diesel::allow_tables_to_appear_in_same_query!(profile, profile_group,);
+diesel::allow_tables_to_appear_in_same_query!(profile, profile_group, script, run_status);
 
 diesel::joinable!(profile -> profile_group (group_id));
+
+diesel::table! {
+    run_status (profile_id, script_id) {
+        profile_id -> Text,
+        script_id -> Text,
+        status -> Integer,
+    }
+}
+
+diesel::joinable!(run_status -> profile (profile_id));
+diesel::joinable!(run_status -> script (script_id));

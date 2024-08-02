@@ -36,7 +36,10 @@ fn main() {
             commands::profile_group_commands::list_profile_groups,
             commands::profile_group_commands::read_total_profile_groups,
             commands::profile_group_commands::update_profile_group,
-            commands::profile_group_commands::delete_profile_groups
+            commands::profile_group_commands::delete_profile_groups,
+            commands::run_status_commands::batch_import_run_status,
+            commands::run_status_commands::delete_run_status_by_profile_ids,
+            commands::run_status_commands::delete_run_status_by_script_ids
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

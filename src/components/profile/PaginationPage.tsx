@@ -13,14 +13,13 @@ export default function PaginationPage() {
         async function fetchData() {
             const total: number = await invoke('read_total_profiles', {
                 search: pageState.search,
-                startDate: pageState.startDate ? new Date(pageState.startDate).toISOString().split('T')[0] : null,
-                endDate: pageState.endDate ? new Date(pageState.endDate).toISOString().split('T')[0] : null,
+                groupId: pageState.profileGroupId
             });
             dispatch(pageSlice.actions.updateTotal(total))
         }
 
         fetchData().then()
-    }, [pageState.currentPage, pageState.search, pageState.startDate, pageState.endDate, pageState.pageLimit]);
+    }, [pageState.currentPage, pageState.search, pageState.profileGroupId, pageState.pageLimit]);
 
     function handleCurrentPageChange(page: number) {
         dispatch(pageSlice.actions.changeCurrentPage(page))
