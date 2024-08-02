@@ -8,7 +8,7 @@ export default function DataTable() {
     const [scrolled, setScrolled] = useState(false);
 
     return (
-        <ScrollArea h={1070} onScrollPositionChange={({y}) => setScrolled(y !== 0)}>
+        <ScrollArea h={1050} onScrollPositionChange={({y}) => setScrolled(y !== 0)}>
             <Table striped>
                 <TableHeader scrolled={scrolled}/>
                 <TableBody/>

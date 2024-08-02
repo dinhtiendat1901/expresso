@@ -1,4 +1,4 @@
-import {Group, Stack} from "@mantine/core";
+import {Divider, Group, Stack} from "@mantine/core";
 import DataTable from "../components/profile/DataTable.tsx";
 import PaginationPage from "../components/profile/PaginationPage.tsx";
 import ItemPerPage from "../components/profile/ItemPerPage.tsx";
@@ -9,13 +9,10 @@ import classes from "../css/Border.module.css"
 
 
 export default function ProfilePage() {
-
     return <Stack gap='sm'>
-        <Group justify='space-between' p={15} className={classes.group}>
+        <Stack className={classes.group} p={15}>
             <SearchArea/>
-            <RunScript/>
-        </Group>
-
+        </Stack>
         <Stack mt={70}>
             <Group justify='space-between'>
                 <ItemPerPage/>

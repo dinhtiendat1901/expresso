@@ -13,7 +13,7 @@ const initialState: PageState = {
     currentPage: 1,
     pageLimit: 10,
     total: 0,
-    search: '',
+    search: undefined,
     profileGroupId: undefined,
     scriptRunning: false
 }
