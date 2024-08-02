@@ -2,8 +2,8 @@ use diesel::prelude::*;
 use diesel::result::Error;
 
 use crate::db::connection::establish_connection;
-use crate::db::models::{NewProfile, Profile, ProfileGroup, ProfileWithGroup, UpdateProfile};
-use crate::db::schema::{profile, profile_group};
+use crate::db::models::{NewProfile, Profile, ProfileGroup, ProfileWithGroup, RunStatusByProfile, UpdateProfile};
+use crate::db::schema::{profile, profile_group, run_status, script};
 
 pub fn get_total_profiles(search: Option<String>, group_id: Option<String>) -> Result<i32, Error> {
     let mut conn = establish_connection();
@@ -25,7 +25,7 @@ pub fn get_total_profiles(search: Option<String>, group_id: Option<String>) -> R
 
 pub fn get_profile(profile_id: String) -> Result<ProfileWithGroup, Error> {
     let mut conn = establish_connection();
-    profile::table
+    let profile_with_group = profile::table
         .inner_join(profile_group::table)
         .filter(profile::id.eq(profile_id))
         .select((
@@ -40,7 +40,40 @@ pub fn get_profile(profile_id: String) -> Result<ProfileWithGroup, Error> {
             name,
             path,
             profile_group,
+            run_status_by_profiles: vec![],  // Initialize empty
+            success: 0,
+            fail: 0,
+        })?;
+
+    // Fetch related run statuses
+    let run_status_by_profiles = get_run_status_by_profile(&profile_with_group.id, &mut conn)?;
+    let (success, fail) = calculate_success_fail(&run_status_by_profiles);
+    Ok(ProfileWithGroup {
+        run_status_by_profiles,
+        success,
+        fail,
+        ..profile_with_group
+    })
+}
+
+fn get_run_status_by_profile(profile_id: &str, conn: &mut SqliteConnection) -> Result<Vec<RunStatusByProfile>, Error> {
+    run_status::table
+        .inner_join(script::table)
+        .filter(run_status::profile_id.eq(profile_id))
+        .select((script::name, run_status::status))
+        .load::<(String, i32)>(conn)
+        .map(|results| {
+            results.into_iter().map(|(script_name, status)| RunStatusByProfile {
+                script_name,
+                status,
+            }).collect()
         })
+}
+
+fn calculate_success_fail(run_status_by_profiles: &Vec<RunStatusByProfile>) -> (i32, i32) {
+    let success = run_status_by_profiles.iter().filter(|rs| rs.status == 1).count() as i32;
+    let fail = run_status_by_profiles.iter().filter(|rs| rs.status == 0).count() as i32;
+    (success, fail)
 }
 
 pub fn list_profiles(
@@ -68,21 +101,31 @@ pub fn list_profiles(
         query = query.filter(profile::group_id.eq(group_id));
     }
 
-    query
+    let profiles_with_group = query
         .offset(skip)
         .limit(limit)
-        .load::<(String, String, String, ProfileGroup)>(&mut conn)
-        .map(|results| {
-            results
-                .into_iter()
-                .map(|(id, name, path, profile_group)| ProfileWithGroup {
-                    id,
-                    name,
-                    path,
-                    profile_group,
-                })
-                .collect()
+        .load::<(String, String, String, ProfileGroup)>(&mut conn)?
+        .into_iter()
+        .map(|(id, name, path, profile_group)| ProfileWithGroup {
+            id,
+            name,
+            path,
+            profile_group,
+            run_status_by_profiles: vec![],  // Initialize empty
+            success: 0,
+            fail: 0,
         })
+        .collect::<Vec<ProfileWithGroup>>();
+
+    // Fetch related run statuses for each profile
+    profiles_with_group.into_iter().map(|mut profile_with_group| {
+        let run_status_by_profiles = get_run_status_by_profile(&profile_with_group.id, &mut conn)?;
+        let (success, fail) = calculate_success_fail(&run_status_by_profiles);
+        profile_with_group.run_status_by_profiles = run_status_by_profiles;
+        profile_with_group.success = success;
+        profile_with_group.fail = fail;
+        Ok(profile_with_group)
+    }).collect()
 }
 
 pub fn create_profile(new_profile: NewProfile) -> Result<Profile, Error> {

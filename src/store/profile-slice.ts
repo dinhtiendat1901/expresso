@@ -4,12 +4,18 @@ import {ProfileGroup} from "./profile-group-slice.ts";
 export interface Profile {
     id: number;
     name: string;
-    description: string;
-    created_date: string;
     path: string;
     running: boolean;
     checked: boolean;
     profile_group: ProfileGroup;
+    run_status_by_profiles: RunStatus[];
+    success: number,
+    fail: number
+}
+
+interface RunStatus {
+    script_name: string,
+    status: number
 }
 
 

@@ -40,6 +40,9 @@ pub struct ProfileWithGroup {
     pub name: String,
     pub path: String,
     pub profile_group: ProfileGroup,
+    pub run_status_by_profiles: Vec<RunStatusByProfile>,
+    pub success: i32,
+    pub fail: i32,
 }
 
 #[derive(Queryable, Insertable, AsChangeset, Serialize, Deserialize, Debug)]
@@ -116,5 +119,11 @@ pub struct NewRunStatus {
 #[derive(AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = run_status)]
 pub struct UpdateRunStatus {
+    pub status: i32,
+}
+
+#[derive(Queryable, Serialize, Deserialize, Debug)]
+pub struct RunStatusByProfile {
+    pub script_name: String,
     pub status: i32,
 }
