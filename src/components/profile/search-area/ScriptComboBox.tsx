@@ -56,7 +56,10 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear
                                    <CloseButton
                                        size="sm"
                                        onMouseDown={(event) => event.preventDefault()}
-                                       onClick={() => setValue(null)}
+                                       onClick={() => {
+                                           setValue(null)
+                                           setScriptId(undefined)
+                                       }}
                                        aria-label="Clear value"
                                    />) : (<Combobox.Chevron/>)
                            }

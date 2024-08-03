@@ -4,12 +4,12 @@ import {useAppSelector} from "../../../store";
 import classes from '../../../css/BagdeLabel.module.css'
 
 interface ScriptComboBoxProp {
-    setProfileGroup: (id: string) => void;
+    setProfileGroupId: (id: string) => void;
     canClear: boolean;
 }
 
 const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
-                                                                          setProfileGroup,
+                                                                          setProfileGroupId,
                                                                           canClear
                                                                       }: ScriptComboBoxProp, ref) {
     const listProfileGroups = useAppSelector(state => state.profileGroup.listProfileGroups);
@@ -23,7 +23,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
             setValue(<Badge classNames={{
                 label: classes.label
             }} color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
-            setProfileGroup(listProfileGroups[0]?.id)
+            setProfileGroupId(listProfileGroups[0]?.id)
         }
     }, [listProfileGroups]);
 
@@ -49,7 +49,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
             withinPortal={true}
             onOptionSubmit={(id, options) => {
                 setValue(options.children);
-                setProfileGroup(id);
+                setProfileGroupId(id);
                 combobox.closeDropdown();
             }}>
 
@@ -64,7 +64,10 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
                                    <CloseButton
                                        size="sm"
                                        onMouseDown={(event) => event.preventDefault()}
-                                       onClick={() => setValue(null)}
+                                       onClick={() => {
+                                           setValue(null)
+                                           setProfileGroupId(undefined)
+                                       }}
                                        aria-label="Clear value"
                                    />) : (<Combobox.Chevron/>)
                            }

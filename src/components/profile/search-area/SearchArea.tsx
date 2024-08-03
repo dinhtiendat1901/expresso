@@ -20,6 +20,7 @@ export default function SearchArea() {
     const [status, setStatus] = useState(undefined);
     const profileGroupComboBox = useRef();
     const scriptComboBox = useRef();
+    const statusRadioBox = useRef();
 
     function handleClickSearch() {
         dispatch(pageSlice.actions.changeCondition({
@@ -38,6 +39,8 @@ export default function SearchArea() {
         profileGroupComboBox.current.clear();
         // @ts-ignore
         scriptComboBox.current.clear();
+        // @ts-ignore
+        statusRadioBox.current.clear();
         dispatch(pageSlice.actions.changeCondition({
             search: '',
             groupId: undefined,
@@ -55,13 +58,13 @@ export default function SearchArea() {
                                onChange={(event) => setSearch(event.currentTarget.value)}
                                onKeyPress={handleKeyPress}/>
                     <Container w={301} p={0}>
-                        <ProfileGroupComboBox ref={profileGroupComboBox} setProfileGroup={setSelectedGroupId}
+                        <ProfileGroupComboBox ref={profileGroupComboBox} setProfileGroupId={setSelectedGroupId}
                                               canClear={true}/>
                     </Container>
                     <Container w={301} p={0}>
                         <ScriptComboBox ref={scriptComboBox} setScriptId={setSelectedScriptId} canClear={true}/>
                     </Container>
-                    <StatusRadio setStatus={setStatus}/>
+                    <StatusRadio setStatus={setStatus} ref={statusRadioBox} selectedScriptId={selectedScriptId}/>
                 </Group>
                 <Space w={17}/>
                 <Group justify='flex-end'>
