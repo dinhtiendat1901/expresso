@@ -20,7 +20,9 @@ export default function TableBody() {
                 skip: (pageState.currentPage - 1) * pageState.pageLimit,
                 limit: pageState.pageLimit,
                 search: pageState.search,
-                groupId: pageState.profileGroupId
+                groupId: pageState.groupId,
+                scriptId: pageState.scriptId,
+                status: pageState.status
             });
             listProfiles = listProfiles.map(profile => {
                 return {...profile, checked: false}

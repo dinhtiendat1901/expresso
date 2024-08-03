@@ -3,11 +3,11 @@ import {CloseButton, Combobox, Input, InputBase, useCombobox} from '@mantine/cor
 import {useAppSelector} from "../../../store";
 
 interface ScriptComboBoxProp {
-    setScriptPath: (path: string) => void;
+    setScriptId: (id: string) => void;
     canClear: boolean;
 }
 
-const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canClear}: ScriptComboBoxProp, ref) {
+const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear}: ScriptComboBoxProp, ref) {
     const listScripts = useAppSelector(state => state.script.listScripts);
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -17,7 +17,7 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
     useEffect(() => {
         if (!canClear) {
             setValue(listScripts[0]?.name)
-            setScriptPath(listScripts[0]?.path)
+            setScriptId(listScripts[0]?.id)
         }
     }, [listScripts]);
 
@@ -30,7 +30,7 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
     });
 
     const options = listScripts.map((script) => (
-        <Combobox.Option value={script.path} key={script.id} fw={700}>
+        <Combobox.Option value={script.id} key={script.id} fw={700}>
             {script.name}
         </Combobox.Option>
     ));
@@ -40,9 +40,9 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
         <Combobox
             store={combobox}
             withinPortal={true}
-            onOptionSubmit={(path, options) => {
+            onOptionSubmit={(id, options) => {
                 setValue(options.children as string);
-                setScriptPath(path);
+                setScriptId(id);
                 combobox.closeDropdown();
             }}>
 

@@ -13,13 +13,15 @@ export default function PaginationPage() {
         async function fetchData() {
             const total: number = await invoke('read_total_profiles', {
                 search: pageState.search,
-                groupId: pageState.profileGroupId
+                groupId: pageState.groupId,
+                scriptId: pageState.scriptId,
+                status: pageState.status
             });
             dispatch(pageSlice.actions.updateTotal(total))
         }
 
         fetchData().then()
-    }, [pageState.currentPage, pageState.search, pageState.profileGroupId, pageState.pageLimit]);
+    }, [pageState.currentPage, pageState.search, pageState.groupId, pageState.scriptId, pageState.status, pageState.pageLimit]);
 
     function handleCurrentPageChange(page: number) {
         dispatch(pageSlice.actions.changeCurrentPage(page))

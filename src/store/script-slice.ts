@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface Script {
-    id: number;
+    id: string;
     name: string;
     path: string;
 }

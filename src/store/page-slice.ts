@@ -5,7 +5,9 @@ interface PageState {
     pageLimit: number;
     total: number;
     search: string;
-    profileGroupId: string;
+    groupId: string;
+    scriptId: string;
+    status: number;
     scriptRunning: boolean;
 }
 
@@ -14,7 +16,9 @@ const initialState: PageState = {
     pageLimit: 10,
     total: 0,
     search: undefined,
-    profileGroupId: undefined,
+    groupId: undefined,
+    scriptId: undefined,
+    status: undefined,
     scriptRunning: false
 }
 
@@ -37,12 +41,16 @@ const pageSlice = createSlice({
         },
         changeCondition(state, action: PayloadAction<{
             search: string;
-            profileGroupId: string;
+            groupId: string;
+            scriptId: string;
+            status: number;
         }>) {
 
             state.currentPage = 1;
             state.search = action.payload.search;
-            state.profileGroupId = action.payload.profileGroupId;
+            state.groupId = action.payload.groupId;
+            state.scriptId = action.payload.scriptId;
+            state.status = action.payload.status;
         },
         changeScriptRunning(state) {
             state.scriptRunning = !state.scriptRunning;

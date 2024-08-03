@@ -2,6 +2,10 @@
     font-weight: 900;
 }
 
+.radio_label {
+    font-weight: 700;
+}
+
 .input {
     border: 2px solid;
 }

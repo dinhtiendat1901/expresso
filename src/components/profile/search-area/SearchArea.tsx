@@ -8,34 +8,41 @@ import pageSlice from "../../../store/page-slice.ts";
 import {handleKeyPress} from "../../../utils/utils.ts";
 import ProfileGroupComboBox from "./ProfileGroupComboBox.tsx";
 import ScriptComboBox from "./ScriptComboBox.tsx";
+import StatusRadio from "./StatusRadio.tsx";
 
 dayjs.extend(customParseFormat);
 
 export default function SearchArea() {
     const dispatch = useAppDispatch();
     const [search, setSearch] = useState('');
-    const [selectedProfileGroup, setSelectedProfileGroup] = useState(undefined);
-    const [selectedScriptPath, setSelectedScriptPath] = useState(undefined);
+    const [selectedGroupId, setSelectedGroupId] = useState(undefined);
+    const [selectedScriptId, setSelectedScriptId] = useState(undefined);
+    const [status, setStatus] = useState(undefined);
     const profileGroupComboBox = useRef();
     const scriptComboBox = useRef();
 
     function handleClickSearch() {
         dispatch(pageSlice.actions.changeCondition({
             search,
-            profileGroupId: selectedProfileGroup
+            groupId: selectedGroupId,
+            scriptId: selectedScriptId,
+            status
         }))
     }
 
     function handleClickReset() {
         setSearch(undefined);
-        setSelectedProfileGroup(undefined);
+        setSelectedGroupId(undefined);
+        setSelectedScriptId(undefined);
         // @ts-ignore
         profileGroupComboBox.current.clear();
         // @ts-ignore
         scriptComboBox.current.clear();
         dispatch(pageSlice.actions.changeCondition({
             search: '',
-            profileGroupId: undefined
+            groupId: undefined,
+            scriptId: undefined,
+            status: undefined
         }))
     }
 
@@ -48,12 +55,13 @@ export default function SearchArea() {
                                onChange={(event) => setSearch(event.currentTarget.value)}
                                onKeyPress={handleKeyPress}/>
                     <Container w={301} p={0}>
-                        <ProfileGroupComboBox ref={profileGroupComboBox} setProfileGroup={setSelectedProfileGroup}
+                        <ProfileGroupComboBox ref={profileGroupComboBox} setProfileGroup={setSelectedGroupId}
                                               canClear={true}/>
                     </Container>
                     <Container w={301} p={0}>
-                        <ScriptComboBox ref={scriptComboBox} setScriptPath={setSelectedScriptPath} canClear={true}/>
+                        <ScriptComboBox ref={scriptComboBox} setScriptId={setSelectedScriptId} canClear={true}/>
                     </Container>
+                    <StatusRadio setStatus={setStatus}/>
                 </Group>
                 <Space w={17}/>
                 <Group justify='flex-end'>
