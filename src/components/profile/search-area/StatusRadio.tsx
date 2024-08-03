@@ -1,5 +1,5 @@
 import {Group, Radio} from '@mantine/core';
-import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import classes from '../../../css/Label.module.css'
 
 interface StatusRadioProp {
@@ -41,17 +41,16 @@ const StatusRadio = forwardRef(function StatusRadio({setStatus, selectedScriptId
         <Radio.Group
             value={value}
             onChange={handleOnChange}
-            label="Run Status"
-            withAsterisk>
-            <Group mt='xs'>
+            label="Run Status">
+            <Group h={36}>
                 <Radio value='' label="Not Run" disabled={disableRadio} classNames={{
-                    label: classes.radio_label
+                    label: classes.radio_label_not_run
                 }}/>
                 <Radio value='1' label="Run Success" disabled={disableRadio} classNames={{
-                    label: classes.radio_label
+                    label: classes.radio_label_success
                 }}/>
                 <Radio value='0' label="Run Fail" disabled={disableRadio} classNames={{
-                    label: classes.radio_label
+                    label: classes.radio_label_fail
                 }}/>
             </Group>
         </Radio.Group>

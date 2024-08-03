@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 const theme = createTheme({
     fontSmoothing: true,
     fontFamily: 'Nunito, sans-serif',
-    primaryColor: 'pink',
+    primaryColor: 'blue',
     components: {
         Input: Input.extend({
             classNames: {

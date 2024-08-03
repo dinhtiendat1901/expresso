@@ -4,12 +4,12 @@ import {useAppSelector} from "../../../store";
 import classes from '../../../css/BagdeLabel.module.css'
 
 interface ScriptComboBoxProp {
-    setProfileGroupId: (id: string) => void;
+    setGroupId: (id: string) => void;
     canClear: boolean;
 }
 
 const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
-                                                                          setProfileGroupId,
+                                                                          setGroupId,
                                                                           canClear
                                                                       }: ScriptComboBoxProp, ref) {
     const listProfileGroups = useAppSelector(state => state.profileGroup.listProfileGroups);
@@ -23,7 +23,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
             setValue(<Badge classNames={{
                 label: classes.label
             }} color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
-            setProfileGroupId(listProfileGroups[0]?.id)
+            setGroupId(listProfileGroups[0]?.id)
         }
     }, [listProfileGroups]);
 
@@ -49,7 +49,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
             withinPortal={true}
             onOptionSubmit={(id, options) => {
                 setValue(options.children);
-                setProfileGroupId(id);
+                setGroupId(id);
                 combobox.closeDropdown();
             }}>
 
@@ -66,7 +66,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
                                        onMouseDown={(event) => event.preventDefault()}
                                        onClick={() => {
                                            setValue(null)
-                                           setProfileGroupId(undefined)
+                                           setGroupId(undefined)
                                        }}
                                        aria-label="Clear value"
                                    />) : (<Combobox.Chevron/>)

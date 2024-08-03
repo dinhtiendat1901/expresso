@@ -56,7 +56,7 @@ export default function TableBody() {
                     }}
                                      color={profile.profile_group.color}>{profile.profile_group.name}</Badge></Table.Td>
                     <Table.Td>
-                        <Accordion variant='filled'>
+                        {!profile.success && !profile.fail ? <Text fw={700}>Try some shit !!!</Text> : <Accordion variant='filled'>
                             <Accordion.Item key={profile.id} value={profile.name}>
                                 <Accordion.Control h={27}>
                                     <Group gap='xl'>
@@ -83,7 +83,7 @@ export default function TableBody() {
                                     ))}
                                 </Accordion.Panel>
                             </Accordion.Item>
-                        </Accordion>
+                        </Accordion>}
                     </Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>

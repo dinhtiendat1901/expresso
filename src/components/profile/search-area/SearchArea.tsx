@@ -1,4 +1,4 @@
-import {ActionIcon, Container, Flex, Group, Space, TextInput} from "@mantine/core";
+import {ActionIcon, Container, Flex, Group, TextInput} from "@mantine/core";
 import {useRef, useState} from "react";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -51,14 +51,14 @@ export default function SearchArea() {
 
     return (
         <>
-            <Flex align='flex-end'>
+            <Flex align='flex-end' justify='space-between'>
                 <Group>
                     <TextInput fw={700} label='Name' w={301}
                                placeholder="Name" value={search}
                                onChange={(event) => setSearch(event.currentTarget.value)}
                                onKeyPress={handleKeyPress}/>
                     <Container w={301} p={0}>
-                        <ProfileGroupComboBox ref={profileGroupComboBox} setProfileGroupId={setSelectedGroupId}
+                        <ProfileGroupComboBox ref={profileGroupComboBox} setGroupId={setSelectedGroupId}
                                               canClear={true}/>
                     </Container>
                     <Container w={301} p={0}>
@@ -66,7 +66,6 @@ export default function SearchArea() {
                     </Container>
                     <StatusRadio setStatus={setStatus} ref={statusRadioBox} selectedScriptId={selectedScriptId}/>
                 </Group>
-                <Space w={17}/>
                 <Group justify='flex-end'>
                     <ActionIcon variant="light" size={37} radius='xl' onClick={handleClickSearch}>
                         <IconSearch style={{width: '60%', height: '60%'}} stroke={3}/>

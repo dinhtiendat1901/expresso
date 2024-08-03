@@ -24,7 +24,7 @@ interface CreateModalProp {
 
 export default function BatchImportModal({close, opened}: CreateModalProp) {
     const dispatch = useAppDispatch()
-    const [selectedProfileGroup, setSelectedProfileGroup] = useState('')
+    const [selectedGroupId, setSelectedGroupId] = useState('')
     const form = useForm({
         mode: 'uncontrolled',
         initialValues,
@@ -36,7 +36,7 @@ export default function BatchImportModal({close, opened}: CreateModalProp) {
     async function handleCreate(values: FormValue) {
         await invoke('batch_import_profile', {
             count: values.count,
-            groupId: selectedProfileGroup
+            groupId: selectedGroupId
         });
         form.reset();
         close();
@@ -66,7 +66,7 @@ export default function BatchImportModal({close, opened}: CreateModalProp) {
                                  label="Number of Profile"
                                  key={form.key('count')}
                                  {...form.getInputProps('count')}/>
-                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup} canClear={false}/>
+                    <ProfileGroupComboBox setGroupId={setSelectedGroupId} canClear={false}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">

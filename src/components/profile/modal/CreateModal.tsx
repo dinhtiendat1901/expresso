@@ -24,7 +24,7 @@ interface CreateModalProp {
 
 export default function CreateModal({close, opened}: CreateModalProp) {
     const dispatch = useAppDispatch()
-    const [selectedProfileGroup, setSelectedProfileGroup] = useState('')
+    const [selectedGroupId, setSelectedGroupId] = useState('')
     const form = useForm({
         mode: 'uncontrolled',
         initialValues,
@@ -36,7 +36,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
     async function handleCreate(values: FormValue) {
         await invoke('create_profile', {
             name: values.name,
-            groupId: selectedProfileGroup
+            groupId: selectedGroupId
         });
         form.reset();
         close();
@@ -63,7 +63,7 @@ export default function CreateModal({close, opened}: CreateModalProp) {
                                key={form.key('name')}
                                {...form.getInputProps('name')}
                                onKeyPress={handleKeyPress}/>
-                    <ProfileGroupComboBox setProfileGroup={setSelectedProfileGroup} canClear={false}/>
+                    <ProfileGroupComboBox setGroupId={setSelectedGroupId} canClear={false}/>
                 </Stack>
 
                 <Group justify="flex-end" mt="md">

@@ -2,8 +2,19 @@
     font-weight: 900;
 }
 
-.radio_label {
+.radio_label_success {
     font-weight: 700;
+    color: green;
+}
+
+.radio_label_fail {
+    font-weight: 700;
+    color: red;
+}
+
+.radio_label_not_run {
+    font-weight: 700;
+    color: gray;
 }
 
 .input {
