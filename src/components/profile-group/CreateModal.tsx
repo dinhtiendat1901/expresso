@@ -5,6 +5,7 @@ import {handleKeyPress, showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import profileGroupSlice from "../../store/profile-group-slice.ts";
 import {useState} from "react";
+import classes from '../../css/Modal.module.css';
 
 interface FormValue {
     name: string
@@ -49,7 +50,10 @@ export default function CreateModal({close, opened}: CreateModalProp) {
 
     return (
 
-        <Modal opened={opened} onClose={onCloseForm} size='lg'>
+        <Modal opened={opened} onClose={onCloseForm} size='lg' title='Create Group' closeOnClickOutside={false}
+               classNames={{
+                   title: classes.title
+               }}>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack gap='sm'>
                     <TextInput fw={700}

@@ -1,11 +1,12 @@
 import {Button, Group, Modal, NumberInput, Stack, Text} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import {useAppDispatch} from "../../store";
+import {useAppDispatch} from "../../../store";
 import {useState} from "react";
-import ProfileGroupComboBox from "./ProfileGroupComboBox.tsx";
+import ProfileGroupComboBox from "../search-area/ProfileGroupComboBox.tsx";
 import {invoke} from "@tauri-apps/api";
-import pageSlice from "../../store/page-slice.ts";
-import {showNotification} from "../../utils/utils.ts";
+import pageSlice from "../../../store/page-slice.ts";
+import {showNotification} from "../../../utils/utils.ts";
+import classes from '../../../css/Modal.module.css';
 
 interface FormValue {
     count: number
@@ -51,7 +52,9 @@ export default function BatchImportModal({close, opened}: CreateModalProp) {
 
 
     return (
-        <Modal opened={opened} onClose={onCloseForm}>
+        <Modal opened={opened} onClose={onCloseForm} closeOnClickOutside={false} title='Batch Import' classNames={{
+            title: classes.title
+        }}>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
                     <NumberInput fw={700}

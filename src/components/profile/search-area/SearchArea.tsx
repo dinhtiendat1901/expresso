@@ -3,9 +3,9 @@ import {useRef, useState} from "react";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {IconRefresh, IconSearch} from "@tabler/icons-react";
-import {useAppDispatch} from "../../store";
-import pageSlice from "../../store/page-slice.ts";
-import {handleKeyPress} from "../../utils/utils.ts";
+import {useAppDispatch} from "../../../store";
+import pageSlice from "../../../store/page-slice.ts";
+import {handleKeyPress} from "../../../utils/utils.ts";
 import ProfileGroupComboBox from "./ProfileGroupComboBox.tsx";
 import ScriptComboBox from "./ScriptComboBox.tsx";
 

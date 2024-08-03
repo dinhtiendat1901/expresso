@@ -2,7 +2,7 @@ import {ActionIcon, Group} from "@mantine/core";
 import {IconPlayerPause, IconPlayerPlay, IconTrash} from "@tabler/icons-react";
 import React, {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
-import DeleteModal from "./DeleteModal.tsx";
+import DeleteModal from "./modal/DeleteModal.tsx";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
 import {fetch, ResponseType} from "@tauri-apps/api/http";
 import {useAppDispatch} from "../../store";

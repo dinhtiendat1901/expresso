@@ -1,14 +1,18 @@
 import {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
-import {CloseButton, Combobox, Input, InputBase, useCombobox} from '@mantine/core';
-import {useAppSelector} from "../../store";
+import {Badge, CloseButton, Combobox, Input, InputBase, useCombobox} from '@mantine/core';
+import {useAppSelector} from "../../../store";
+import classes from '../../../css/BagdeLabel.module.css'
 
 interface ScriptComboBoxProp {
-    setScriptPath: (path: string) => void;
+    setProfileGroup: (id: string) => void;
     canClear: boolean;
 }
 
-const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canClear}: ScriptComboBoxProp, ref) {
-    const listScripts = useAppSelector(state => state.script.listScripts);
+const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
+                                                                          setProfileGroup,
+                                                                          canClear
+                                                                      }: ScriptComboBoxProp, ref) {
+    const listProfileGroups = useAppSelector(state => state.profileGroup.listProfileGroups);
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
@@ -16,10 +20,12 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
 
     useEffect(() => {
         if (!canClear) {
-            setValue(listScripts[0]?.name)
-            setScriptPath(listScripts[0]?.path)
+            setValue(<Badge classNames={{
+                label: classes.label
+            }} color={listProfileGroups[0]?.color}>{listProfileGroups[0]?.name}</Badge>)
+            setProfileGroup(listProfileGroups[0]?.id)
         }
-    }, [listScripts]);
+    }, [listProfileGroups]);
 
     useImperativeHandle(ref, () => {
         return {
@@ -29,25 +35,27 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
         };
     });
 
-    const options = listScripts.map((script) => (
-        <Combobox.Option value={script.path} key={script.id} fw={700}>
-            {script.name}
+    const options = listProfileGroups.map((profileGroup) => (
+        <Combobox.Option value={profileGroup.id} key={profileGroup.id} fw={700}>
+            <Badge classNames={{
+                label: classes.label
+            }} color={profileGroup.color}>{profileGroup.name}</Badge>
         </Combobox.Option>
     ));
-
 
     return (
         <Combobox
             store={combobox}
             withinPortal={true}
-            onOptionSubmit={(path, options) => {
-                setValue(options.children as string);
-                setScriptPath(path);
+            onOptionSubmit={(id, options) => {
+                setValue(options.children);
+                setProfileGroup(id);
                 combobox.closeDropdown();
             }}>
 
             <Combobox.Target>
-                <InputBase label='Script'
+                <InputBase classNames={{input: classes.input}}
+                           label='Group'
                            component="button"
                            type="button"
                            pointer
@@ -73,4 +81,4 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptPath, canCle
     );
 })
 
-export default ScriptComboBox
+export default ProfileGroupComboBox

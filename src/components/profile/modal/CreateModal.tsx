@@ -1,11 +1,12 @@
 import {Button, Group, Modal, Stack, Text, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
-import {useAppDispatch} from "../../store";
-import pageSlice from "../../store/page-slice.ts";
-import {handleKeyPress, showNotification} from "../../utils/utils.ts";
+import {useAppDispatch} from "../../../store";
+import pageSlice from "../../../store/page-slice.ts";
+import {handleKeyPress, showNotification} from "../../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {useState} from "react";
-import ProfileGroupComboBox from "./ProfileGroupComboBox.tsx";
+import ProfileGroupComboBox from "../search-area/ProfileGroupComboBox.tsx";
+import classes from '../../../css/Modal.module.css';
 
 interface FormValue {
     name: string
@@ -50,7 +51,9 @@ export default function CreateModal({close, opened}: CreateModalProp) {
 
     return (
 
-        <Modal opened={opened} onClose={onCloseForm}>
+        <Modal opened={opened} onClose={onCloseForm} closeOnClickOutside={false} title='Create Profile' classNames={{
+            title: classes.title
+        }}>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
                     <TextInput fw={700}

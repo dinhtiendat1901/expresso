@@ -5,6 +5,7 @@ import {handleKeyPress, showNotification} from "../../utils/utils.ts";
 import {invoke} from "@tauri-apps/api";
 import {open} from "@tauri-apps/api/dialog";
 import scriptSlice from "../../store/script-slice.ts";
+import classes from "../../css/Modal.module.css";
 
 interface FormValue {
     name: string,
@@ -64,7 +65,10 @@ export default function CreateModal({close, opened}: CreateModalProp) {
 
     return (
 
-        <Modal opened={opened} onClose={onCloseForm} size='lg'>
+        <Modal opened={opened} onClose={onCloseForm} size='lg' title='Create Script' closeOnClickOutside={false}
+               classNames={{
+                   title: classes.title
+               }}>
             <form onSubmit={form.onSubmit(handleCreate)}>
                 <Stack>
                     <TextInput fw={700}

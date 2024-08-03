@@ -5,7 +5,12 @@ use crate::db::connection::establish_connection;
 use crate::db::models::{NewProfile, Profile, ProfileGroup, ProfileWithGroup, RunStatusByProfile, UpdateProfile};
 use crate::db::schema::{profile, profile_group, run_status, script};
 
-pub fn get_total_profiles(search: Option<String>, group_id: Option<String>) -> Result<i32, Error> {
+pub fn get_total_profiles(
+    search: Option<String>,
+    group_id: Option<String>,
+    script_id: Option<String>,
+    status: Option<i32>,
+) -> Result<i32, Error> {
     let mut conn = establish_connection();
     let mut query = profile::table.into_boxed();
 
@@ -15,6 +20,22 @@ pub fn get_total_profiles(search: Option<String>, group_id: Option<String>) -> R
 
     if let Some(group_id) = group_id {
         query = query.filter(profile::group_id.eq(group_id));
+    }
+
+    if let Some(script_id) = script_id {
+        if let Some(status) = status {
+            query = query.filter(profile::id.eq_any(
+                run_status::table
+                    .filter(run_status::script_id.eq(script_id).and(run_status::status.eq(status)))
+                    .select(run_status::profile_id),
+            ));
+        } else {
+            query = query.filter(profile::id.ne_all(
+                run_status::table
+                    .filter(run_status::script_id.eq(script_id))
+                    .select(run_status::profile_id),
+            ));
+        }
     }
 
     query
@@ -81,6 +102,8 @@ pub fn list_profiles(
     limit: i64,
     search: Option<String>,
     group_id: Option<String>,
+    script_id: Option<String>,
+    status: Option<i32>,
 ) -> Result<Vec<ProfileWithGroup>, Error> {
     let mut conn = establish_connection();
     let mut query = profile::table
@@ -99,6 +122,22 @@ pub fn list_profiles(
 
     if let Some(group_id) = group_id {
         query = query.filter(profile::group_id.eq(group_id));
+    }
+
+    if let Some(script_id) = script_id {
+        if let Some(status) = status {
+            query = query.filter(profile::id.eq_any(
+                run_status::table
+                    .filter(run_status::script_id.eq(script_id).and(run_status::status.eq(status)))
+                    .select(run_status::profile_id),
+            ));
+        } else {
+            query = query.filter(profile::id.ne_all(
+                run_status::table
+                    .filter(run_status::script_id.eq(script_id))
+                    .select(run_status::profile_id),
+            ));
+        }
     }
 
     let profiles_with_group = query

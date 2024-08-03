@@ -6,8 +6,13 @@ use uuid::Uuid;
 use crate::db::models::{NewProfile, Profile, ProfileWithGroup, UpdateProfile};
 use crate::repositories::{config_repository, profile_group_repository, profile_repository};
 
-pub fn get_total_profiles_service(search: Option<String>, group_id: Option<String>) -> Result<i32, Error> {
-    profile_repository::get_total_profiles(search, group_id)
+pub fn get_total_profiles_service(
+    search: Option<String>,
+    group_id: Option<String>,
+    script_id: Option<String>,
+    status: Option<i32>,
+) -> Result<i32, Error> {
+    profile_repository::get_total_profiles(search, group_id, script_id, status)
 }
 
 pub fn create_profile_service(name: String, group_id: String) -> Result<Profile, Error> {
@@ -33,8 +38,10 @@ pub fn list_profiles_service(
     limit: i64,
     search: Option<String>,
     group_id: Option<String>,
+    script_id: Option<String>,
+    status: Option<i32>,
 ) -> Result<Vec<ProfileWithGroup>, Error> {
-    profile_repository::list_profiles(skip, limit, search, group_id)
+    profile_repository::list_profiles(skip, limit, search, group_id, script_id, status)
 }
 
 pub fn update_profile_service(

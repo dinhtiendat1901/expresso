@@ -1,10 +1,9 @@
-import {Divider, Group, Stack} from "@mantine/core";
+import {Group, Stack} from "@mantine/core";
 import DataTable from "../components/profile/DataTable.tsx";
 import PaginationPage from "../components/profile/PaginationPage.tsx";
 import ItemPerPage from "../components/profile/ItemPerPage.tsx";
-import SearchArea from "../components/profile/SearchArea.tsx";
+import SearchArea from "../components/profile/search-area/SearchArea.tsx";
 import ActionButton from "../components/profile/ActionButton.tsx";
-import RunScript from "../components/profile/RunScript.tsx";
 import classes from "../css/Border.module.css"
 
 
