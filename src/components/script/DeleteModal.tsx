@@ -8,7 +8,7 @@ import scriptSlice from "../../store/script-slice.ts";
 interface DeleteModalProp {
     close: () => void;
     opened: boolean;
-    scriptId: number;
+    scriptId: string;
 }
 
 export default function DeleteModal({close, opened, scriptId}: DeleteModalProp) {

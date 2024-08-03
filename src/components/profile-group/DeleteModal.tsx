@@ -9,15 +9,15 @@ import profileGroupSlice from "../../store/profile-group-slice.ts";
 interface DeleteModalProp {
     close: () => void;
     opened: boolean;
-    profileGroupId: string;
+    groupId: string;
 }
 
-export default function DeleteModal({close, opened, profileGroupId}: DeleteModalProp) {
+export default function DeleteModal({close, opened, groupId}: DeleteModalProp) {
     const dispatch = useAppDispatch()
 
     async function handleClickConfirm() {
         await invoke('delete_profile_groups', {
-            profileGroupIds: [profileGroupId]
+            profileGroupIds: [groupId]
         });
         dispatch(profileGroupSlice.actions.changeTotal(-1));
         close();
@@ -28,7 +28,7 @@ export default function DeleteModal({close, opened, profileGroupId}: DeleteModal
         <Modal opened={opened} onClose={close} withCloseButton={false} closeOnEscape={false}
                closeOnClickOutside={false}>
             <Stack align='center'>
-                <Text fw={700}>Do you want to delete <Text span fw={900} c='red'>Profile Group {profileGroupId}</Text> ?</Text>
+                <Text fw={700}>Do you want to delete <Text span fw={900} c='red'>Profile Group {groupId}</Text> ?</Text>
                 <Group justify='center'>
                     <ActionIcon variant='subtle' color='green' radius='xl'
                                 onClick={handleClickConfirm}><IconCircleCheck/></ActionIcon>

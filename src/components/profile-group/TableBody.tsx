@@ -37,7 +37,7 @@ export default function TableBody() {
                     </Table.Td>
                 </Table.Tr>))
             }</Table.Tbody>
-            <DeleteModal opened={deleteModalOpened} close={deleteModalCtl.close} profileGroupId={deleteProfileGroup}/>
+            <DeleteModal opened={deleteModalOpened} close={deleteModalCtl.close} groupId={deleteProfileGroup}/>
         </>
     )
 }

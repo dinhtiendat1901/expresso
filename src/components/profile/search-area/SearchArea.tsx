@@ -1,8 +1,8 @@
-import {ActionIcon, Container, Flex, Group, TextInput} from "@mantine/core";
-import {useRef, useState} from "react";
+import {Button, Container, Flex, Group, Text, TextInput} from "@mantine/core";
+import React, {useRef, useState} from "react";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import {IconRefresh, IconSearch} from "@tabler/icons-react";
+import {IconFileSearch, IconRefresh} from "@tabler/icons-react";
 import {useAppDispatch} from "../../../store";
 import pageSlice from "../../../store/page-slice.ts";
 import {handleKeyPress} from "../../../utils/utils.ts";
@@ -67,12 +67,11 @@ export default function SearchArea() {
                     <StatusRadio setStatus={setStatus} ref={statusRadioBox} selectedScriptId={selectedScriptId}/>
                 </Group>
                 <Group justify='flex-end'>
-                    <ActionIcon variant="light" size={37} radius='xl' onClick={handleClickSearch}>
-                        <IconSearch style={{width: '60%', height: '60%'}} stroke={3}/>
-                    </ActionIcon>
-                    <ActionIcon variant="light" size={37} radius='xl' onClick={handleClickReset}>
-                        <IconRefresh style={{width: '60%', height: '60%'}} stroke={3}/>
-                    </ActionIcon>
+                    <Button size='xs' radius='xl' onClick={handleClickSearch} rightSection={<IconFileSearch size={15}
+                    />}><Text fw={700}>Search</Text></Button>
+                    <Button size='xs' radius='xl' variant='light' onClick={handleClickReset}
+                            rightSection={<IconRefresh size={15}
+                            />}><Text fw={700}>Reset</Text></Button>
                 </Group>
             </Flex>
         </>

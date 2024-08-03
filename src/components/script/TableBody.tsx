@@ -11,10 +11,10 @@ export default function TableBody() {
     const listScripts = useAppSelector(state => state.script.listScripts);
 
     const [deleteModalOpened, deleteModalCtl] = useDisclosure(false);
-    const [deleteScriptId, setDeleteScriptId] = useState(0);
+    const [deleteScriptId, setDeleteScriptId] = useState('');
 
 
-    function handleClickDelete(id: number) {
+    function handleClickDelete(id: string) {
         setDeleteScriptId(id);
         deleteModalCtl.open()
     }
