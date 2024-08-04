@@ -1,12 +1,11 @@
-import {Button, Group, Modal, Stack, Text, TextInput} from "@mantine/core";
+import {Button, Group, Modal, Stack, Text} from "@mantine/core";
 import ScriptComboBox from "../search-area/ScriptComboBox.tsx";
 import {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../store";
 import {fetch, ResponseType} from "@tauri-apps/api/http";
 import pageSlice from "../../../store/page-slice.ts";
 import classes from "../../../css/Modal.module.css";
-import {isNotEmpty, useForm} from "@mantine/form";
-import {handleKeyPress} from "../../../utils/utils.ts";
+import {useForm} from "@mantine/form";
 
 interface RunModalProp {
     close: () => void;
@@ -14,12 +13,9 @@ interface RunModalProp {
 }
 
 interface FormValue {
-    name: string
 }
 
-const initialValues: FormValue = {
-    name: ''
-}
+const initialValues: FormValue = {}
 
 export default function RunModal({close, opened}: RunModalProp) {
     const dispatch = useAppDispatch()
@@ -29,13 +25,10 @@ export default function RunModal({close, opened}: RunModalProp) {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues,
-        validate: {
-            name: isNotEmpty('Enter your name')
-        },
+        validate: {},
     });
 
-    async function handleClickRunScript(values: FormValue) {
-        console.log('click')
+    async function handleClickRunScript() {
         dispatch(pageSlice.actions.changeScriptRunning())
         const listRunProfiles = listProfiles.filter(profile => profile.checked === true).map(profile => {
             return {
@@ -56,6 +49,8 @@ export default function RunModal({close, opened}: RunModalProp) {
             },
             responseType: ResponseType.Text
         });
+        form.reset();
+        close();
     }
 
     return (
@@ -67,13 +62,6 @@ export default function RunModal({close, opened}: RunModalProp) {
         }}>
             <form onSubmit={form.onSubmit(handleClickRunScript)}>
                 <Stack>
-                    <TextInput fw={700}
-                               withAsterisk
-                               label="Name"
-                               placeholder="Your name"
-                               key={form.key('name')}
-                               {...form.getInputProps('name')}
-                               onKeyPress={handleKeyPress}/>
                     <ScriptComboBox setScriptId={setSelectedScriptId} canClear={false}/>
                 </Stack>
                 <Group justify="flex-end" mt="md">

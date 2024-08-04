@@ -39,7 +39,10 @@ export default function RootPage() {
                 running: false
             }));
         });
-        socket.on('finish-script', () => {
+        socket.on('finish-script', async (listRunStatus) => {
+            await invoke('batch_import_run_status', {
+                runStatusList: listRunStatus
+            });
             dispatch(pageSlice.actions.changeScriptRunning())
         });
 

@@ -5,6 +5,7 @@ const {Locator} = require('puppeteer');
 const puppeteer = require('puppeteer-extra');
 puppeteer.use(require('puppeteer-extra-plugin-stealth')());
 const {io} = require('../socket');
+const {scriptData, listRunStatus, setListRunStatus} = require("./global-variables");
 
 const connection = new IORedis({maxRetriesPerRequest: null});
 let functionJob;
@@ -21,11 +22,21 @@ const myWorker = new Worker('myqueue', async (job) => {
     await functionJob(browser, puppeteer, Locator);
 }, {connection});
 
-myWorker.on('completed', async () => {
+myWorker.on('completed', async (job) => {
+    listRunStatus.push({
+        profile_id: job.data.id,
+        script_id: scriptData.currentScriptId,
+        status: 1
+    })
     await checkFinish();
 })
 
-myWorker.on('failed', async () => {
+myWorker.on('failed', async (job) => {
+    listRunStatus.push({
+        profile_id: job.data.id,
+        script_id: scriptData.currentScriptId,
+        status: 0
+    })
     await checkFinish();
 })
 
@@ -40,7 +51,8 @@ async function checkFinish() {
     const prioritizedJob = await myQueue.getPrioritizedCount();
     const waitingJob = await myQueue.getWaitingCount();
     if (activeJob === 0 && delayedJob === 0 && prioritizedJob === 0 && waitingJob === 0) {
-        io.emit('finish-script');
+        io.emit('finish-script', listRunStatus);
+        setListRunStatus([]);
     }
 }
 

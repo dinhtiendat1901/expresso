@@ -12,6 +12,6 @@ app.get('/stop-profile/:id', async (req, res) => {
 });
 
 app.post('/run-job', async (req, res) => {
-    await runJob(req.body.scriptPath, req.body.listProfilePaths);
+    await runJob(req.body.script, req.body.listRunProfiles);
     res.send('Run Job Successfully!');
 });

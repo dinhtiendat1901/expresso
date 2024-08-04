@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer-extra');
 puppeteer.use(require('puppeteer-extra-plugin-stealth')());
 const {io} = require('../socket');
-const {listCurrentBrowser, setListCurrentBrowser} = require('./list-current-browser');
+const {listCurrentBrowser, setListCurrentBrowser, setCurrentScriptId} = require('./global-variables');
 const {myQueue, setFunctionJob, clearQueue} = require("./bullmq-init");
 
 
@@ -30,14 +30,16 @@ async function stopProfile(id) {
     }
 }
 
-async function runJob(scriptPath, listProfilePaths) {
+async function runJob(script, listRunProfiles) {
     await clearQueue();
-    setFunctionJob(scriptPath);
-    await myQueue.addBulk(listProfilePaths.map(profilePath => {
+    setFunctionJob(script.path);
+    setCurrentScriptId(script.id);
+    await myQueue.addBulk(listRunProfiles.map(profile => {
         return {
             name: 'job',
             data: {
-                path: profilePath
+                id: profile.id,
+                path: profile.path
             }
         }
     }))
