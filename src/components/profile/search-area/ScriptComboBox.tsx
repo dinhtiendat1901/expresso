@@ -1,5 +1,5 @@
 import {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
-import {CloseButton, Combobox, Input, InputBase, useCombobox} from '@mantine/core';
+import {CloseButton, Combobox, Input, InputBase, Text, useCombobox} from '@mantine/core';
 import {useAppSelector} from "../../../store";
 
 interface ScriptComboBoxProp {
@@ -16,7 +16,7 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear
 
     useEffect(() => {
         if (!canClear) {
-            setValue(listScripts[0]?.name)
+            setValue(<Text fw={700}>{listScripts[0]?.name}</Text>)
             setScriptId(listScripts[0]?.id)
         }
     }, [listScripts]);
@@ -30,8 +30,8 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear
     });
 
     const options = listScripts.map((script) => (
-        <Combobox.Option value={script.id} key={script.id} fw={700}>
-            {script.name}
+        <Combobox.Option value={script.id} key={script.id}>
+            <Text fw={700}>{script.name}</Text>
         </Combobox.Option>
     ));
 
@@ -41,7 +41,7 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear
             store={combobox}
             withinPortal={true}
             onOptionSubmit={(id, options) => {
-                setValue(options.children as string);
+                setValue(options.children);
                 setScriptId(id);
                 combobox.closeDropdown();
             }}>
@@ -52,7 +52,7 @@ const ScriptComboBox = forwardRef(function ScriptComboBox({setScriptId, canClear
                            type="button"
                            pointer
                            rightSection={
-                               value !== null ? (
+                               (value !== null) && canClear ? (
                                    <CloseButton
                                        size="sm"
                                        onMouseDown={(event) => event.preventDefault()}

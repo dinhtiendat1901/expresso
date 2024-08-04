@@ -60,7 +60,7 @@ const ProfileGroupComboBox = forwardRef(function ProfileGroupComboBox({
                            type="button"
                            pointer
                            rightSection={
-                               value !== null ? (
+                               (value !== null) && canClear ? (
                                    <CloseButton
                                        size="sm"
                                        onMouseDown={(event) => event.preventDefault()}
