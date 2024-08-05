@@ -1,7 +1,6 @@
 const {Queue, Worker} = require('bullmq');
 const IORedis = require('ioredis');
 const {createJob} = require("./utils");
-const {Locator} = require('puppeteer');
 const puppeteer = require('puppeteer-extra');
 puppeteer.use(require('puppeteer-extra-plugin-stealth')());
 const {io} = require('../socket');
@@ -19,7 +18,7 @@ const myWorker = new Worker('myqueue', async (job) => {
         defaultViewport: null,
         userDataDir: path
     });
-    await functionJob(browser, puppeteer, Locator);
+    await functionJob(browser);
 }, {connection});
 
 myWorker.on('completed', async (job) => {
