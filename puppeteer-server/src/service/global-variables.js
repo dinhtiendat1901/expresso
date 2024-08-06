@@ -1,6 +1,10 @@
+const path = require("path");
+const fs = require("fs");
 let listCurrentBrowser = []
 let listRunStatus = []
-let scriptData = { currentScriptId: '' }; // Encapsulate the script ID in an object
+let functionJob = {
+    job: null
+}
 
 function setListCurrentBrowser(listBrowserUpdated) {
     listCurrentBrowser.length = 0;  // Clear the array without changing the reference
@@ -12,8 +16,16 @@ function setListRunStatus(listRunStatusUpdated) {
     listRunStatusUpdated.forEach(item => listRunStatus.push(item));  // Add new items
 }
 
-function setCurrentScriptId(newCurrentScriptId) {
-    scriptData.currentScriptId = newCurrentScriptId; // Update the property of the object
+function createJob(pathStr) {
+    const filePath = path.join(pathStr);
+    const content = fs.readFileSync(filePath, 'utf8');
+    functionJob.job = eval(`
+        async function test(browser) {
+            ${content}
+        }
+
+        test;
+    `)
 }
 
 module.exports = {
@@ -21,6 +33,6 @@ module.exports = {
     setListCurrentBrowser,
     setListRunStatus,
     listRunStatus,
-    scriptData, // Export the object
-    setCurrentScriptId
+    functionJob,
+    createJob
 };

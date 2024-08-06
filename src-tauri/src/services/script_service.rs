@@ -11,9 +11,15 @@ pub fn get_total_scripts_service() -> Result<i32, Error> {
 pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
     let path = &new_script.path;
     let contain_string = "const target = await browser.waitForTarget";
+    let contain_string_1 = "const targetPage = await target.page()";
     let wrap_pattern_1 = "browser.once('targetcreated', async (target) => {\n...\n})";
     let wrap_pattern_2 = "await (\n...\n)";
     let wrap_pattern_3 = "await new Promise(r => setTimeout(r, 1000));\n...";
+    let wrap_pattern_4 = "try {
+                    ...
+                } catch (error) {
+
+                }";
     let start_string = "await puppeteer.Locator.race([";
     let end_string = "])";
     let start_string_1 = "await (";
@@ -47,6 +53,7 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
 
     handle_script::remove_specific_line(path, ".setTimeout(timeout)").expect("TODO: panic message");
     handle_script::remove_specific_line(path, ".on('action', () => startWaitingForEvents())").expect("TODO: panic message");
+    handle_script::remove_specific_line(path, "startWaitingForEvents()").expect("TODO: panic message");
     handle_script::replace_words(path, "puppeteer.Locator", "Promise").expect("TODO: panic message");
     handle_script::replace_words(path, "targetPage.locator", "targetPage.waitForSelector").expect("TODO: panic message");
     handle_script::replace_words(path, ".fill(", ".type(").expect("TODO: panic message");
@@ -57,6 +64,12 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
     let list_wrapped_contents_3 = handle_script::wrap_content(list_filtered_contents, wrap_pattern_3)
         .expect("Error wrapping content");
     handle_script::write_file_with_list_content(path, list_wrapped_contents_3)
+        .expect("Error writing file");
+    let list_contents_4 = handle_script::find_closest_braces_with_content(path, contain_string_1)
+        .expect("Error finding closest braces");
+    let list_wrapped_contents_4 = handle_script::wrap_content(list_contents_4.clone(), wrap_pattern_4)
+        .expect("Error wrapping content");
+    handle_script::write_file_with_list_content(path, list_wrapped_contents_4)
         .expect("Error writing file");
     handle_script::cut_off_file(path, start_line, end_line).expect("TODO: panic message");
     script_repository::create_script(new_script)

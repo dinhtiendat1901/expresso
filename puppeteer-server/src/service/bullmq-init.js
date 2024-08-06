@@ -1,47 +1,31 @@
 const {Queue, Worker} = require('bullmq');
 const IORedis = require('ioredis');
-const {createJob} = require("./utils");
 const puppeteer = require('puppeteer-extra');
 puppeteer.use(require('puppeteer-extra-plugin-stealth')());
 const {io} = require('../socket');
-const {scriptData, listRunStatus, setListRunStatus} = require("./global-variables");
+const {listRunStatus, setListRunStatus, functionJob} = require("./global-variables");
 
 const connection = new IORedis({maxRetriesPerRequest: null});
-let functionJob;
-
-
 const myQueue = new Queue('myqueue', {connection});
 const myWorker = new Worker('myqueue', async (job) => {
-    const {path} = job.data;
+    const {profile_path} = job.data;
     const browser = await puppeteer.launch({
         headless: false,
         defaultViewport: null,
-        userDataDir: path
+        userDataDir: profile_path
     });
-    await functionJob(browser);
+    await functionJob.job(browser);
 }, {connection});
 
 myWorker.on('completed', async (job) => {
     listRunStatus.push({
-        profile_id: job.data.id,
-        script_id: scriptData.currentScriptId,
+        profile_id: job.data.profile_id,
+        script_id: job.data.script_id,
         status: 1
     })
     await checkFinish();
 })
 
-myWorker.on('failed', async (job) => {
-    listRunStatus.push({
-        profile_id: job.data.id,
-        script_id: scriptData.currentScriptId,
-        status: 0
-    })
-    await checkFinish();
-})
-
-function setFunctionJob(scriptPath) {
-    functionJob = createJob(scriptPath)
-}
 
 async function checkFinish() {
     console.log(await myQueue.getJobCounts())
@@ -51,7 +35,7 @@ async function checkFinish() {
     const waitingJob = await myQueue.getWaitingCount();
     if (activeJob === 0 && delayedJob === 0 && prioritizedJob === 0 && waitingJob === 0) {
         io.emit('finish-script', listRunStatus);
-        setListRunStatus([]);
+        // setListRunStatus([]);
     }
 }
 
@@ -66,4 +50,4 @@ async function clearQueue() {
 }
 
 
-module.exports = {myQueue, connection, setFunctionJob, clearQueue}
+module.exports = {myQueue, connection, clearQueue}
