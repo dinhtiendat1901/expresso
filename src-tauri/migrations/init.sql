@@ -40,6 +40,19 @@ create table config
     check (id = 1)
 );
 
+create table run_status
+(
+    profile_id text    not null
+        references profile,
+    script_id  text    not null
+        references script,
+    status     integer not null,
+    primary key (profile_id, script_id),
+    check (status in (0, 1))
+);
+
+
+
 
 
 
