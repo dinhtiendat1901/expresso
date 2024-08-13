@@ -2,106 +2,40 @@ use diesel::result::Error;
 
 use crate::db::models::{NewScript, Script, UpdateScript};
 use crate::repositories::script_repository;
-use crate::services::handle_script;
+use crate::services::handle_script::ScriptFile;
 
 pub fn get_total_scripts_service() -> Result<i32, Error> {
     script_repository::get_total_scripts()
 }
 
 pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
-    let path = &new_script.path;
-    let contain_string = "const target = await browser.waitForTarget";
-    let contain_string_1 = "const targetPage = await target.page()";
-    let contain_string_2 = "browser.once('targetcreated', async (target)";
-    let contain_string_3 = "new Promise((resolve, reject)";
-    let wrap_pattern_1 = "browser.once('targetcreated', async (target) => {\n...\n})";
-    let wrap_pattern_2 = "await (\n...\n)";
-    let wrap_pattern_3 = "await new Promise(r => setTimeout(r, 1000));\n...";
-    let wrap_pattern_4 = "try {
+    let mut script_file = ScriptFile {
+        path: String::from(&new_script.path),
+        content: Vec::new(),
+        list_filtered: Vec::new(),
+    };
+
+    script_file.read_file().expect("Error");
+    script_file.find_closest_braces("const target = await browser.waitForTarget", false).wrap_with_pattern("browser.once('targetcreated', async (target) => {\n...\n})").rewrite_content();
+    script_file.find_between_string("await puppeteer.Locator.race([", "])", false).wrap_with_pattern("await (\n...\n)").rewrite_content();
+    script_file.find_closest_braces("browser.once('targetcreated', async (target)", false).wrap_with_pattern("new Promise((resolve, reject) => {
+                                        ...
+                                     })").rewrite_content();
+    script_file.remove_lines("const target = await browser.waitForTarget").remove_lines(".setTimeout(timeout)").remove_lines(".on('action', () => startWaitingForEvents())").remove_lines("startWaitingForEvents()").replace_words("puppeteer.Locator", "Promise").replace_words("targetPage.locator", "targetPage.waitForSelector").replace_words(".fill(", ".type(");
+    script_file.find_between_string("await (", ";", true).filter_list_content(".type(").wrap_with_pattern("await new Promise(r => setTimeout(r, 1000));\n...").rewrite_content();
+    script_file.find_closest_braces("const targetPage = await target.page()", false).wrap_with_pattern("try {
                     ...
                     resolve();
                 } catch (error) {
                     reject(error);
-                }";
-    let wrap_pattern_5 = "new Promise((resolve, reject) => {
-                                        ...
-                                     })";
-    let wrap_pattern_6 = "...,";
-    let wrap_pattern_7 = "await Promise.all([
+                }").rewrite_content();
+    script_file.find_closest_braces("new Promise((resolve, reject)", true).remove_brace().rewrite_content();
+    script_file.find_closest_braces("browser.once('targetcreated', async (target)", true).wrap_with_pattern("...,").merge_element_consecutive().wrap_with_pattern("await Promise.all([
                                     ...
-                                    ])";
-    let start_string = "await puppeteer.Locator.race([";
-    let end_string = "])";
-    let start_string_1 = "await (";
-    let end_string_1 = ";";
-    let start_line = "const browser = await puppeteer.launch();";
-    let end_line = "await browser.close();";
+                                    ])").rewrite_content();
+    script_file.cut_off_file("const browser = await puppeteer.launch();", "await browser.close();");
 
-    // Step 1: Find the closest braces with content
-    let list_contents_1 = handle_script::find_closest_braces_with_content(path, contain_string, false)
-        .expect("Error finding closest braces");
-
-    // Step 2: Wrap the content
-    let list_wrapped_contents_1 = handle_script::wrap_content(list_contents_1.clone(), wrap_pattern_1)
-        .expect("Error wrapping content");
-
-
-    // Step 3: Write the file with the wrapped content
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_1)
-        .expect("Error writing file");
-
-    handle_script::remove_specific_line(path, "const target = await browser.waitForTarget").expect("TODO: panic message");
-
-    let list_contents_2 = handle_script::get_content_between_string(path, start_string, end_string, false)
-        .expect("Error finding closest braces");
-
-    let list_wrapped_contents_2 = handle_script::wrap_content(list_contents_2.clone(), wrap_pattern_2)
-        .expect("Error wrapping content");
-
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_2)
-        .expect("Error writing file");
-    let list_contents_3 = handle_script::find_closest_braces_with_content(path, contain_string_2, false)
-        .expect("Error finding closest braces");
-    let list_wrapped_contents_3 = handle_script::wrap_content(list_contents_3.clone(), wrap_pattern_5)
-        .expect("Error wrapping content");
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_3)
-        .expect("Error writing file");
-
-
-    handle_script::remove_specific_line(path, ".setTimeout(timeout)").expect("TODO: panic message");
-    handle_script::remove_specific_line(path, ".on('action', () => startWaitingForEvents())").expect("TODO: panic message");
-    handle_script::remove_specific_line(path, "startWaitingForEvents()").expect("TODO: panic message");
-    handle_script::replace_words(path, "puppeteer.Locator", "Promise").expect("TODO: panic message");
-    handle_script::replace_words(path, "targetPage.locator", "targetPage.waitForSelector").expect("TODO: panic message");
-    handle_script::replace_words(path, ".fill(", ".type(").expect("TODO: panic message");
-
-    let list_contents_3 = handle_script::get_content_between_string(path, start_string_1, end_string_1, true)
-        .expect("Error finding closest braces");
-    let list_filtered_contents = handle_script::filter_list_content(list_contents_3.clone(), ".type(");
-    let list_wrapped_contents_3 = handle_script::wrap_content(list_filtered_contents, wrap_pattern_3)
-        .expect("Error wrapping content");
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_3)
-        .expect("Error writing file");
-    let list_contents_4 = handle_script::find_closest_braces_with_content(path, contain_string_1, false)
-        .expect("Error finding closest braces");
-    let list_wrapped_contents_4 = handle_script::wrap_content(list_contents_4.clone(), wrap_pattern_4)
-        .expect("Error wrapping content");
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_4)
-        .expect("Error writing file");
-    let list_contents_5 = handle_script::find_closest_braces_with_content(path, contain_string_3, false)
-        .expect("Error finding closest braces");
-    handle_script::remove_brace(path, list_contents_5.clone())
-        .expect("Error writing file");
-    let list_contents_6 = handle_script::find_closest_braces_with_content(path, contain_string_2, true)
-        .expect("Error finding closest braces");
-    let list_wrapped_contents_5 = handle_script::wrap_content(list_contents_6.clone(), wrap_pattern_6)
-        .expect("Error wrapping content");
-    let list_merged_contents = handle_script::merge_element_consecutive(list_wrapped_contents_5.clone());
-    let list_wrapped_contents_6 = handle_script::wrap_content(list_merged_contents.clone(), wrap_pattern_7)
-        .expect("Error wrapping content");
-    handle_script::write_file_with_list_content(path, list_wrapped_contents_6)
-        .expect("Error writing file");
-    handle_script::cut_off_file(path, start_line, end_line).expect("TODO: panic message");
+    script_file.rewrite_file().expect("Error");
     script_repository::create_script(new_script)
 }
 
