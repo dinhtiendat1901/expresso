@@ -47,6 +47,7 @@ create table run_status
     script_id  text    not null
         references script,
     status     integer not null,
+    detail     text,
     primary key (profile_id, script_id),
     check (status in (0, 1))
 );

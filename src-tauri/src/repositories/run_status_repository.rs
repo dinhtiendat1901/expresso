@@ -22,6 +22,7 @@ pub fn batch_import_run_status(run_status_list: Vec<NewRunStatus>) -> Result<usi
                     let profile_id = status.profile_id.clone();
                     let script_id = status.script_id.clone();
                     status.status = new_status.status;
+                    status.detail = new_status.detail.clone();
                     diesel::update(run_status::table.find((profile_id, script_id)))
                         .set(&status)
                         .execute(conn)?;

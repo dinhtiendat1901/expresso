@@ -36,7 +36,7 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
     script_file.find_closest_braces("browser.once('targetcreated', async (target)", true).wrap_with_pattern("...,").merge_element_consecutive().wrap_with_pattern("await Promise.all([
                                     ...
                                     ])
-                                    await ((await browser.pages()).pop()).waitForNavigation({waitUntil: 'networkidle0'})").rewrite_content();
+                                    await ((await browser.pages()).pop()).waitForNavigation({waitUntil: 'networkidle0', timeout: 30000})").rewrite_content();
     script_file.cut_off_file("(async () => {", "})().catch(err => {");
     script_file.find_between_string("const browser = await puppeteer.launch();", "await browser.close();", false).remove_brace().wrap_with_pattern("try {
     ...

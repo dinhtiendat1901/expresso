@@ -32,7 +32,7 @@ pub fn read_total_profile_groups() -> Result<i32, String> {
 pub fn update_profile_group(
     profile_group_id: String,
     name: Option<String>,
-    color: Option<String>
+    color: Option<String>,
 ) -> Result<ProfileGroup, String> {
     profile_group_service::update_profile_group_service(profile_group_id, name, color)
         .map_err(|e| e.to_string())

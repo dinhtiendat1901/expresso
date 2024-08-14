@@ -106,6 +106,7 @@ pub struct RunStatus {
     pub profile_id: String,
     pub script_id: String,
     pub status: i32,
+    pub detail: Option<String>,
 }
 
 #[derive(Insertable, Serialize, Deserialize)]
@@ -114,16 +115,19 @@ pub struct NewRunStatus {
     pub profile_id: String,
     pub script_id: String,
     pub status: i32,
+    pub detail: Option<String>,
 }
 
 #[derive(AsChangeset, Serialize, Deserialize)]
 #[diesel(table_name = run_status)]
 pub struct UpdateRunStatus {
     pub status: i32,
+    pub detail: Option<String>,
 }
 
 #[derive(Queryable, Serialize, Deserialize, Debug)]
 pub struct RunStatusByProfile {
     pub script_name: String,
     pub status: i32,
+    pub detail: Option<String>,
 }

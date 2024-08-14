@@ -43,6 +43,7 @@ diesel::table! {
         profile_id -> Text,
         script_id -> Text,
         status -> Integer,
+        detail -> Nullable<Text>,
     }
 }
 

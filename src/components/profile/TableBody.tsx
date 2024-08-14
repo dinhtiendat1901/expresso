@@ -1,4 +1,4 @@
-import {Accordion, Badge, Checkbox, Group, rem, Table, Text} from "@mantine/core";
+import {Accordion, Badge, Checkbox, Group, HoverCard, rem, Table, Text} from "@mantine/core";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
@@ -56,34 +56,45 @@ export default function TableBody() {
                     }}
                                      color={profile.profile_group.color}>{profile.profile_group.name}</Badge></Table.Td>
                     <Table.Td>
-                        {!profile.success && !profile.fail ? <Text fw={700}>Try some shit !!!</Text> : <Accordion variant='filled'>
-                            <Accordion.Item key={profile.id} value={profile.name}>
-                                <Accordion.Control h={27}>
-                                    <Group gap='xl'>
-                                        <Group gap='xs'>
-                                            <Badge size="9" circle color='green'></Badge>
-                                            <Text fw={700}>Success: {profile.success}</Text>
+                        {!profile.success && !profile.fail ? <Text fw={700}>Try some shit !!!</Text> :
+                            <Accordion variant='filled'>
+                                <Accordion.Item key={profile.id} value={profile.name}>
+                                    <Accordion.Control h={27}>
+                                        <Group gap='xl'>
+                                            <Group gap='xs'>
+                                                <Badge size="9" circle color='green'></Badge>
+                                                <Text fw={700}>Success: {profile.success}</Text>
+                                            </Group>
+                                            <Group gap='xs'>
+                                                <Badge size="9" circle color='red'></Badge>
+                                                <Text fw={700}>Fail: {profile.fail}</Text>
+                                            </Group>
                                         </Group>
-                                        <Group gap='xs'>
-                                            <Badge size="9" circle color='red'></Badge>
-                                            <Text fw={700}>Fail: {profile.fail}</Text>
-                                        </Group>
-                                    </Group>
-                                </Accordion.Control>
-                                <Accordion.Panel>
-                                    {profile.run_status_by_profiles.map((run_status) => (
-                                        <Group key={run_status.script_name}>
-                                            {run_status.status ?
-                                                <IconCircleCheck style={{width: rem(15), height: rem(15)}}
-                                                                 color='green'/> :
-                                                <IconXboxX style={{width: rem(15), height: rem(15)}} color='red'/>
-                                            }
-                                            <Text fw={700}>{run_status.script_name}</Text>
-                                        </Group>
-                                    ))}
-                                </Accordion.Panel>
-                            </Accordion.Item>
-                        </Accordion>}
+                                    </Accordion.Control>
+                                    <Accordion.Panel>
+                                        {profile.run_status_by_profiles.map((run_status) => (
+                                            <Group key={run_status.script_name}>
+                                                {run_status.status ?
+                                                    <IconCircleCheck style={{width: rem(15), height: rem(15)}}
+                                                                     color='green'/> :
+                                                    <IconXboxX style={{width: rem(15), height: rem(15)}} color='red'/>
+                                                }
+
+                                                {run_status.status ? <Text fw={700}>{run_status.script_name}</Text> :
+                                                    <HoverCard width={280} shadow="md">
+                                                        <HoverCard.Target>
+                                                            <Text fw={700}
+                                                                  className={classes.pointer}>{run_status.script_name}</Text>
+                                                        </HoverCard.Target>
+                                                        <HoverCard.Dropdown w='auto'>
+                                                            <Text size='sm' fw={700}>{run_status.detail}</Text>
+                                                        </HoverCard.Dropdown>
+                                                    </HoverCard>}
+                                            </Group>
+                                        ))}
+                                    </Accordion.Panel>
+                                </Accordion.Item>
+                            </Accordion>}
                     </Table.Td>
                     <Table.Td>
                         <ProfileAction profile={profile}/>

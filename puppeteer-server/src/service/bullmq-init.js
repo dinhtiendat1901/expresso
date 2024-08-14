@@ -26,6 +26,16 @@ myWorker.on('completed', async (job) => {
     await checkFinish();
 })
 
+myWorker.on('failed', async (job, error) => {
+    listRunStatus.push({
+        profile_id: job.data.profile_id,
+        script_id: job.data.script_id,
+        status: 0,
+        detail: error.toString()
+    })
+    await checkFinish();
+})
+
 
 async function checkFinish() {
     console.log(await myQueue.getJobCounts())
@@ -35,7 +45,7 @@ async function checkFinish() {
     const waitingJob = await myQueue.getWaitingCount();
     if (activeJob === 0 && delayedJob === 0 && prioritizedJob === 0 && waitingJob === 0) {
         io.emit('finish-script', listRunStatus);
-        // setListRunStatus([]);
+        setListRunStatus([]);
     }
 }
 

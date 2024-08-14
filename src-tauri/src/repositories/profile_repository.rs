@@ -81,12 +81,13 @@ fn get_run_status_by_profile(profile_id: &str, conn: &mut SqliteConnection) -> R
     run_status::table
         .inner_join(script::table)
         .filter(run_status::profile_id.eq(profile_id))
-        .select((script::name, run_status::status))
-        .load::<(String, i32)>(conn)
+        .select((script::name, run_status::status, run_status::detail))
+        .load::<(String, i32, Option<String>)>(conn)
         .map(|results| {
-            results.into_iter().map(|(script_name, status)| RunStatusByProfile {
+            results.into_iter().map(|(script_name, status, detail)| RunStatusByProfile {
                 script_name,
                 status,
+                detail,
             }).collect()
         })
 }

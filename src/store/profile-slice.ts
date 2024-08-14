@@ -15,7 +15,8 @@ export interface Profile {
 
 interface RunStatus {
     script_name: string,
-    status: number
+    status: number,
+    detail: string,
 }
 
 
