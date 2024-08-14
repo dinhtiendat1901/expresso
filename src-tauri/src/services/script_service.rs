@@ -25,6 +25,9 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
     script_file.find_between_string("await (", ";", true).filter_list_content(".type(").wrap_with_pattern("await new Promise(r => setTimeout(r, 1000));\n...").rewrite_content();
     script_file.find_closest_braces("const targetPage = await target.page()", false).wrap_with_pattern("try {
                     ...
+                    while (!targetPage.isClosed()) {
+                            await new Promise(r => setTimeout(r, 1000));
+                        }
                     resolve();
                 } catch (error) {
                     reject(error);
@@ -32,8 +35,14 @@ pub fn create_script_service(new_script: NewScript) -> Result<Script, Error> {
     script_file.find_closest_braces("new Promise((resolve, reject)", true).remove_brace().rewrite_content();
     script_file.find_closest_braces("browser.once('targetcreated', async (target)", true).wrap_with_pattern("...,").merge_element_consecutive().wrap_with_pattern("await Promise.all([
                                     ...
-                                    ])").rewrite_content();
-    script_file.cut_off_file("const browser = await puppeteer.launch();", "await browser.close();");
+                                    ])
+                                    await ((await browser.pages()).pop()).waitForNavigation({waitUntil: 'networkidle0'})").rewrite_content();
+    script_file.cut_off_file("(async () => {", "})().catch(err => {");
+    script_file.find_between_string("const browser = await puppeteer.launch();", "await browser.close();", false).remove_brace().wrap_with_pattern("try {
+    ...
+    } finally {
+        await browser.close();
+    }").rewrite_content();
 
     script_file.rewrite_file().expect("Error");
     script_repository::create_script(new_script)
