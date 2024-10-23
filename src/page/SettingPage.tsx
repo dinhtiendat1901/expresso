@@ -1,9 +1,9 @@
 import {ActionIcon, Anchor, Flex, Group, Stack, Text} from "@mantine/core";
 import {useAppDispatch, useAppSelector} from "../store";
-import {open} from '@tauri-apps/api/dialog';
+import {open} from '@tauri-apps/plugin-dialog';
 import {useEffect, useState} from "react";
 import {IconDeviceFloppy, IconSquareX} from "@tabler/icons-react";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import ConfigSlice from "../store/config-slice.ts";
 import {showNotification} from "../utils/utils.ts";
 

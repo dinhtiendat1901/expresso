@@ -2,8 +2,8 @@ import {Button, Group, Modal, Stack, Text, TextInput} from '@mantine/core';
 import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch} from "../../store";
 import {handleKeyPress, showNotification} from "../../utils/utils.ts";
-import {invoke} from "@tauri-apps/api";
-import {open} from "@tauri-apps/api/dialog";
+import {invoke} from "@tauri-apps/api/core";
+import {open} from "@tauri-apps/plugin-dialog";
 import scriptSlice from "../../store/script-slice.ts";
 import classes from "../../css/Modal.module.css";
 

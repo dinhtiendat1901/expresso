@@ -2,7 +2,7 @@ import {Accordion, Badge, Checkbox, Group, HoverCard, rem, Table, Text} from "@m
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import ProfileAction from "./ProfileAction.tsx";
 import classes from '../../css/BagdeLabel.module.css'
 import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";

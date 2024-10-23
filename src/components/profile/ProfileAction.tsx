@@ -4,8 +4,8 @@ import React, {useState} from "react";
 import {useDisclosure} from "@mantine/hooks";
 import DeleteModal from "./modal/DeleteModal.tsx";
 import profileSlice, {Profile} from "../../store/profile-slice.ts";
-import {fetch, ResponseType} from "@tauri-apps/api/http";
 import {useAppDispatch} from "../../store";
+import axios from "axios";
 
 interface ProfileActionProp {
     profile: Profile
@@ -22,14 +22,11 @@ export default function ProfileAction({profile}: ProfileActionProp) {
     }
 
     async function handleClickRun() {
-        await fetch(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-profile`, {
-            method: 'GET',
-            timeout: 30,
-            query: {
+        await axios.get(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-profile`, {
+            params: {
                 id: profile.id.toString(),
                 path: profile.path
-            },
-            responseType: ResponseType.Text
+            }
         });
         dispatch(profileSlice.actions.setRunning({
             id: profile.id,
@@ -38,11 +35,7 @@ export default function ProfileAction({profile}: ProfileActionProp) {
     }
 
     async function handleClickStop() {
-        await fetch(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/stop-profile/${profile.id}`, {
-            method: 'GET',
-            timeout: 30,
-            responseType: ResponseType.Text
-        });
+        await axios.get(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/stop-profile/${profile.id}`);
     }
 
 

@@ -18,7 +18,10 @@ pub fn list_profile_groups() -> Result<Vec<ProfileGroup>, Error> {
 
 pub fn get_total_profile_groups() -> Result<i32, Error> {
     let mut conn = establish_connection();
-    profile_group.count().get_result::<i64>(&mut conn).map(|count| count as i32)
+    profile_group
+        .count()
+        .get_result::<i64>(&mut conn)
+        .map(|count| count as i32)
 }
 
 pub fn create_profile_group(new_profile_group: NewProfileGroup) -> Result<ProfileGroup, Error> {
@@ -30,7 +33,10 @@ pub fn create_profile_group(new_profile_group: NewProfileGroup) -> Result<Profil
     profile_group.order(id.desc()).first(&mut conn)
 }
 
-pub fn update_profile_group(profile_group_id: String, updated_profile_group: UpdateProfileGroup) -> Result<ProfileGroup, Error> {
+pub fn update_profile_group(
+    profile_group_id: String,
+    updated_profile_group: UpdateProfileGroup,
+) -> Result<ProfileGroup, Error> {
     let mut conn = establish_connection();
     diesel::update(profile_group.find(profile_group_id.clone()))
         .set(&updated_profile_group)
@@ -49,8 +55,7 @@ pub fn delete_profile_groups(profile_group_ids: Vec<String>) -> Result<Vec<Strin
         .load(&mut conn)?;
 
     // Delete profile groups
-    diesel::delete(profile_group.filter(id.eq_any(&profile_group_ids)))
-        .execute(&mut conn)?;
+    diesel::delete(profile_group.filter(id.eq_any(&profile_group_ids))).execute(&mut conn)?;
 
     Ok(related_profile_ids)
 }

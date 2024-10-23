@@ -2,7 +2,7 @@ import {Button, ColorPicker, Group, Modal, Space, Stack, Text, TextInput} from '
 import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch} from "../../store";
 import {handleKeyPress, showNotification} from "../../utils/utils.ts";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import profileGroupSlice from "../../store/profile-group-slice.ts";
 import {useState} from "react";
 import classes from '../../css/Modal.module.css';

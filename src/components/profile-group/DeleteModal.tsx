@@ -2,7 +2,7 @@ import {ActionIcon, Group, Modal, Stack, Text} from "@mantine/core";
 import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";
 import {useAppDispatch} from "../../store";
 import {showNotification} from "../../utils/utils.ts";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import profileGroupSlice from "../../store/profile-group-slice.ts";
 
 

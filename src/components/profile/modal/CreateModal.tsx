@@ -3,7 +3,7 @@ import {isNotEmpty, useForm} from '@mantine/form';
 import {useAppDispatch} from "../../../store";
 import pageSlice from "../../../store/page-slice.ts";
 import {handleKeyPress, showNotification} from "../../../utils/utils.ts";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import {useState} from "react";
 import ProfileGroupComboBox from "../search-area/ProfileGroupComboBox.tsx";
 import classes from '../../../css/Modal.module.css';

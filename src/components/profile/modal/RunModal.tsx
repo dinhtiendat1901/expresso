@@ -2,10 +2,10 @@ import {Button, Group, Modal, Stack, Text} from "@mantine/core";
 import ScriptComboBox from "../search-area/ScriptComboBox.tsx";
 import {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../store";
-import {fetch, ResponseType} from "@tauri-apps/api/http";
 import pageSlice from "../../../store/page-slice.ts";
 import classes from "../../../css/Modal.module.css";
 import {useForm} from "@mantine/form";
+import axios from "axios";
 
 interface RunModalProp {
     close: () => void;
@@ -37,18 +37,19 @@ export default function RunModal({close, opened}: RunModalProp) {
             }
         })
         const script = listScripts.find(script => script.id === selectedScriptId);
-        await fetch<string>(`${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-job`, {
-            method: 'POST',
-            timeout: 30,
-            body: {
+        await axios.post(
+            `${import.meta.env.VITE_PUPPETEER_SERVER_URL}/run-job`,
+            {
                 type: 'Json',
                 payload: {
                     script,
                     listRunProfiles
                 }
             },
-            responseType: ResponseType.Text
-        });
+            {
+                timeout: 30000 // Axios expects timeout in milliseconds, so 30 seconds is 30000 ms
+            }
+        );
         form.reset();
         close();
     }

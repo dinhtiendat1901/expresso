@@ -7,7 +7,10 @@ use crate::db::schema::script::dsl::*;
 
 pub fn get_total_scripts() -> Result<i32, Error> {
     let mut conn = establish_connection();
-    script.count().get_result::<i64>(&mut conn).map(|count| count as i32)
+    script
+        .count()
+        .get_result::<i64>(&mut conn)
+        .map(|count| count as i32)
 }
 
 pub fn get_script(script_id: String) -> Result<Script, Error> {

@@ -15,7 +15,6 @@ pub struct ScriptFile {
     pub list_filtered: Vec<ContentBetween>,
 }
 
-
 impl ScriptFile {
     pub fn read_file(&mut self) -> io::Result<()> {
         let file = File::open(&self.path)?;
@@ -34,7 +33,9 @@ impl ScriptFile {
 
         for (i, line) in lines.iter().enumerate() {
             if line.contains(contain_string) {
-                if let Some((open_brace_line, close_brace_line, content)) = find_braces(&lines, i + 1, include_wrapper) {
+                if let Some((open_brace_line, close_brace_line, content)) =
+                    find_braces(&lines, i + 1, include_wrapper)
+                {
                     results.push(ContentBetween {
                         start_line_number: open_brace_line,
                         end_line_number: close_brace_line,
@@ -54,7 +55,8 @@ impl ScriptFile {
         for content_between in &self.list_filtered {
             let content_str = content_between.content.join("\n");
             let wrapped_str = wrap_pattern.replace("...", &content_str);
-            let wrapped_lines: Vec<String> = wrapped_str.lines().map(|line| line.to_string()).collect();
+            let wrapped_lines: Vec<String> =
+                wrapped_str.lines().map(|line| line.to_string()).collect();
 
             wrapped_contents.push(ContentBetween {
                 start_line_number: content_between.start_line_number,
@@ -78,7 +80,8 @@ impl ScriptFile {
             let new_length = content_between.content.len();
 
             // Replace the specified range with new content
-            self.content.splice(start_index..end_index, content_between.content.clone());
+            self.content
+                .splice(start_index..end_index, content_between.content.clone());
 
             // Adjust offset for the next iteration
             offset += new_length as isize - original_length as isize;
@@ -181,16 +184,25 @@ impl ScriptFile {
     }
 
     pub fn filter_list_content(&mut self, contain_string: &str) -> &mut Self {
-        self.list_filtered = self.list_filtered
+        self.list_filtered = self
+            .list_filtered
             .clone()
             .into_iter()
-            .filter(|content_between| !content_between.content.iter().any(|line| line.contains(contain_string)))
+            .filter(|content_between| {
+                !content_between
+                    .content
+                    .iter()
+                    .any(|line| line.contains(contain_string))
+            })
             .collect();
         self
     }
 
     pub fn cut_off_file(&mut self, start_line: &str, end_line: &str) -> &mut Self {
-        let start_index = self.content.iter().position(|line| line.contains(start_line));
+        let start_index = self
+            .content
+            .iter()
+            .position(|line| line.contains(start_line));
         let end_index = self.content.iter().position(|line| line.contains(end_line));
 
         if let (Some(start), Some(end)) = (start_index, end_index) {
@@ -204,7 +216,8 @@ impl ScriptFile {
     }
 
     pub fn remove_lines(&mut self, contain_string: &str) -> &mut Self {
-        self.content = self.content
+        self.content = self
+            .content
             .clone()
             .into_iter()
             .filter(|line| !line.contains(contain_string))
@@ -220,8 +233,11 @@ impl ScriptFile {
     }
 }
 
-
-fn find_braces(lines: &[String], line_number: usize, include_wrapper: bool) -> Option<(usize, usize, Vec<String>)> {
+fn find_braces(
+    lines: &[String],
+    line_number: usize,
+    include_wrapper: bool,
+) -> Option<(usize, usize, Vec<String>)> {
     let mut brace_balance = 0;
 
     if line_number == 0 || line_number > lines.len() {
@@ -256,7 +272,12 @@ fn find_braces(lines: &[String], line_number: usize, include_wrapper: bool) -> O
     let mut content = Vec::new();
 
     // Find the corresponding close brace and extract content
-    for (i, line) in lines.iter().enumerate().skip(open_brace_line).take(lines.len() - open_brace_line) {
+    for (i, line) in lines
+        .iter()
+        .enumerate()
+        .skip(open_brace_line)
+        .take(lines.len() - open_brace_line)
+    {
         for ch in line.chars() {
             if ch == '{' {
                 brace_balance += 1;
@@ -269,7 +290,8 @@ fn find_braces(lines: &[String], line_number: usize, include_wrapper: bool) -> O
                         content = lines[start..end].to_vec();
                         return Some((start + 1, end, content)); // Return 1-based line numbers and content
                     } else {
-                        return Some((open_brace_line + 1, close_brace_line - 1, content)); // Return 1-based line numbers and content
+                        return Some((open_brace_line + 1, close_brace_line - 1, content));
+                        // Return 1-based line numbers and content
                     }
                 } else {
                     brace_balance -= 1;

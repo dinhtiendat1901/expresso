@@ -3,7 +3,7 @@ import {IconCircleCheck, IconXboxX} from "@tabler/icons-react";
 import {useAppDispatch} from "../../../store";
 import pageSlice from "../../../store/page-slice.ts";
 import {showNotification} from "../../../utils/utils.ts";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 
 interface DeleteModalProp {
     close: () => void;

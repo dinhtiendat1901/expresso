@@ -9,12 +9,14 @@ mod repositories;
 mod services;
 
 fn main() {
-    Command::new("./binaries/puppeteer-server-win.exe")
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .spawn()
-        .expect("Failed to start external module");
+    // Command::new("./binaries/puppeteer-server-win.exe")
+    //     .stdout(Stdio::null())
+    //     .stderr(Stdio::null())
+    //     .spawn()
+    //     .expect("Failed to start external module");
     tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             commands::profile_commands::read_total_profiles,
             commands::profile_commands::create_profile,

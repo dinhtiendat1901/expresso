@@ -2,7 +2,7 @@ import {AppShell, Box, LoadingOverlay} from "@mantine/core";
 import NavbarSimple from "../components/NavbarSimple.tsx";
 import {Outlet} from "react-router-dom";
 import {useEffect} from "react";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import {useAppDispatch, useAppSelector} from "../store";
 import ConfigSlice from "../store/config-slice.ts";
 import {io} from "socket.io-client";

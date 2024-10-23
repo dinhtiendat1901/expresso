@@ -12,7 +12,10 @@ pub fn get_config() -> Result<Config, Error> {
 
 pub fn set_config(new_path: Option<String>) -> Result<Config, Error> {
     let mut conn = establish_connection();
-    let new_config = Config { id: 1, path: new_path };
+    let new_config = Config {
+        id: 1,
+        path: new_path,
+    };
     diesel::replace_into(config)
         .values(&new_config)
         .execute(&mut conn)?;
